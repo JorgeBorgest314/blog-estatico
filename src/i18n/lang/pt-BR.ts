@@ -79,8 +79,8 @@ export default {
     goToNextPage: "Ir para a próxima página",
   },
   notFound: {
-    title: "404 Não encontrado",
-    message: "Página não encontrada",
+    title: "Página não encontrada",
+    message: "O endereço que você abriu não existe ou foi movido.",
     goHome: "Voltar para o início",
   },
 } satisfies UIStrings;

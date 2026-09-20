@@ -16,19 +16,32 @@ const t = useTranslations(locale);
 
   <main
     id="main-content"
-    class="app-layout my-1 flex flex-1 items-center justify-center"
+    class="app-layout flex flex-1 flex-col items-center justify-center py-16 text-center"
   >
-    <div class="mb-14 flex flex-col items-center justify-center">
-      <h1 class="text-accent text-9xl font-bold">404</h1>
-      <span aria-hidden="true"> ¯\_(ツ)_/¯ </span>
-      <p class="mt-4 text-2xl sm:text-3xl">{t.notFound.message}</p>
+    <p
+      class="text-hn font-sans text-[11px] font-bold tracking-[0.2em] uppercase"
+    >
+      {t.notFound.title}
+    </p>
+    <h1 class="mt-4 font-serif text-6xl font-bold tracking-tight sm:text-7xl">
+      404
+    </h1>
+    <p class="mt-6 font-serif text-[19px]">{t.notFound.message}</p>
+    <p class="mt-8 font-sans text-[13px]">
       <LinkButton
         href={getRelativeLocaleUrl(locale, "")}
-        class="my-6 text-lg underline decoration-dashed underline-offset-8"
+        class="hover:text-hn underline underline-offset-4"
       >
         {t.notFound.goHome}
       </LinkButton>
-    </div>
+      <span class="text-muted-foreground mx-2" aria-hidden="true">|</span>
+      <LinkButton
+        href={getRelativeLocaleUrl(locale, "posts")}
+        class="hover:text-hn underline underline-offset-4"
+      >
+        {t.home.allPosts}
+      </LinkButton>
+    </p>
   </main>
 
   <Footer />

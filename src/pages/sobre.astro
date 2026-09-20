@@ -7,11 +7,11 @@ import Main from "@/components/Main.astro";
 import Footer from "@/components/Footer.astro";
 import config from "@/config";
 
-const about = await getEntry("pages", "about");
+const about = await getEntry("pages", "sobre");
 
 if (!about) {
   throw new Error(
-    "Missing content entry: `about.md` or `about.mdx` in `src/content/pages/`"
+    "Missing content entry: `sobre.md` or `sobre.mdx` in `src/content/pages/`"
   );
 }
 
@@ -28,7 +28,7 @@ const { Content } = await render(about);
 
   <Breadcrumb />
 
-  <Main pageTitle={about.data.title} class="app-prose">
+  <Main pageTitle={about.data.title} class="app-prose about-page">
     <Content />
   </Main>
 
