@@ -39,12 +39,17 @@ const links = [
   ]}
   {...attrs}
 >
-  <nav class="text-muted-foreground flex flex-wrap justify-center gap-x-2">
+  <nav
+    class="text-muted-foreground flex flex-wrap items-center justify-center gap-x-1"
+  >
     {
       links.map(({ label, href }, index) => (
         <>
           {index > 0 && <span aria-hidden="true">|</span>}
-          <a href={href} class="hover:text-foreground hover:underline">
+          <a
+            href={href}
+            class="hover:text-foreground inline-block px-1.5 py-2.5 hover:underline"
+          >
             {label}
           </a>
         </>
