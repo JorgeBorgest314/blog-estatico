@@ -73,7 +73,8 @@
     }
 
     table {
-      @apply font-sans text-[15px];
+      @apply block max-w-full overflow-x-auto font-sans text-[15px];
+      width: max-content;
 
       th,
       td {
@@ -131,11 +132,7 @@
   }
 
   .astro-code {
-    @apply outline-border flex border bg-(--shiki-light-bg) text-(--shiki-light) [&_span]:text-(--shiki-light);
-  }
-
-  html[data-theme="dark"] .astro-code {
-    @apply bg-(--shiki-dark-bg) text-(--shiki-dark) [&_span]:text-(--shiki-dark);
+    @apply flex border border-neutral-700;
   }
 
   .astro-code {
@@ -152,4 +149,12 @@
       @apply border-border rounded-sm border px-0.5 py-px;
     }
   }
+}
+
+.app-prose .katex {
+  font-size: 1.05em;
+}
+
+.app-prose .katex-display {
+  @apply my-8 overflow-x-auto overflow-y-hidden px-1;
 }

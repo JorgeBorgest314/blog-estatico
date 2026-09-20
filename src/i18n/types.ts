@@ -9,6 +9,7 @@ export interface UIStrings {
   };
   post: {
     by: string;
+    readingTime: string;
     publishedAt: string;
     updatedAt: string;
     sharePostIntro: string;

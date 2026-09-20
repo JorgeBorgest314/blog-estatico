@@ -11,6 +11,7 @@ export default {
   },
   post: {
     by: "Por",
+    readingTime: "{{minutes}} min de leitura",
     publishedAt: "Publicado em",
     updatedAt: "Atualizado em",
     sharePostIntro: "Compartilhe este post:",
