@@ -1,34 +1,47 @@
 @plugin "@tailwindcss/typography";
 
 @layer base {
-  /* ===== Override default Tailwind Typography styles ===== */
   .app-prose {
-    @apply prose;
+    @apply prose text-foreground max-w-none font-serif text-[19px] leading-[1.8];
+
+    > p:first-of-type::first-letter {
+      @apply text-hn float-left mt-[6px] mr-3 text-[64px] leading-[0.72] font-bold sm:text-[84px];
+    }
+
+    p {
+      @apply my-7;
+    }
 
     h1,
     h2,
     h3,
     h4,
     th {
-      @apply text-foreground mb-3;
+      @apply text-foreground font-serif font-bold tracking-tight;
+    }
+
+    h2 {
+      @apply mt-12 mb-5 text-[28px] leading-tight;
     }
 
     h3 {
-      @apply italic;
+      @apply mt-10 mb-4 text-[23px] leading-tight;
+    }
+
+    h4 {
+      @apply mt-8 mb-3 text-[19px];
     }
 
     p,
     strong,
     ol,
     ul,
-    figcaption,
-    table,
-    code {
+    table {
       @apply text-foreground;
     }
 
     a {
-      @apply text-foreground hover:text-accent wrap-break-word decoration-dashed underline-offset-4 focus-visible:no-underline;
+      @apply text-foreground hover:text-hn wrap-break-word underline decoration-1 underline-offset-4 focus-visible:no-underline;
     }
 
     ul {
@@ -36,7 +49,7 @@
     }
 
     li {
-      @apply marker:text-accent;
+      @apply marker:text-hn;
     }
 
     hr {
@@ -44,7 +57,7 @@
     }
 
     img {
-      @apply border-border mx-auto border;
+      @apply mx-auto;
     }
 
     img[role="button"] {
@@ -56,10 +69,12 @@
     }
 
     figcaption {
-      @apply opacity-75;
+      @apply text-muted-foreground text-center font-sans text-[13px];
     }
 
     table {
+      @apply font-sans text-[15px];
+
       th,
       td {
         @apply border-border border p-2;
@@ -86,15 +101,20 @@
     }
 
     code {
-      @apply bg-muted/75 text-foreground rounded p-1 wrap-break-word before:content-none after:content-none;
+      @apply bg-muted text-foreground rounded px-1.5 py-0.5 font-mono text-[15px] font-normal wrap-break-word before:content-none after:content-none;
     }
 
     .astro-code code {
-      @apply flex-[1_0_100%] bg-inherit p-0;
+      @apply flex-[1_0_100%] bg-inherit p-0 text-[14px];
     }
 
     blockquote {
-      @apply border-s-accent/80 wrap-break-word opacity-80;
+      @apply border-hn text-muted-foreground my-10 border-s-4 ps-6 text-[24px] leading-[1.55] font-normal wrap-break-word italic;
+
+      p:first-of-type::before,
+      p:last-of-type::after {
+        content: none;
+      }
     }
 
     details:not(.callout) {
@@ -106,11 +126,10 @@
     }
 
     pre {
-      @apply focus-visible:outline-accent focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-dashed;
+      @apply focus-visible:outline-accent my-9 rounded-md px-5 py-4 font-mono text-[14px] leading-[1.6] focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-dashed;
     }
   }
 
-  /* ===== Code Blocks & Syntax Highlighting ===== */
   .astro-code {
     @apply outline-border flex border bg-(--shiki-light-bg) text-(--shiki-light) [&_span]:text-(--shiki-light);
   }
@@ -119,8 +138,6 @@
     @apply bg-(--shiki-dark-bg) text-(--shiki-dark) [&_span]:text-(--shiki-dark);
   }
 
-  /* Styles for Shiki transformers */
-  /* https://shiki.style/packages/transformers */
   .astro-code {
     .line.diff.add {
       @apply relative inline-block w-full bg-green-400/20 before:absolute before:-left-3 before:text-green-500 before:content-['+'];

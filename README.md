@@ -1,4 +1,4 @@
-# Jorge.dev — blog estático
+# Jorge — blog estático
 
 Blog sobre programação e matemática, gerado como site estático com [Astro](https://astro.build/) a partir do template [AstroPaper](https://github.com/satnaing/astro-paper) (Tailwind v4, Pagefind, RSS, sitemap). Publicado em S3 + CloudFront.
 
