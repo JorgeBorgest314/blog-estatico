@@ -2,7 +2,7 @@ import { defineAstroPaperConfig } from "./src/types/config";
 
 export default defineAstroPaperConfig({
   site: {
-    url: "https://jorge.dev/",
+    url: "https://jorge.blog.br/",
     title: "Jorge",
     description: "Blog sobre computação e matemática.",
     author: "Jorge Borges",

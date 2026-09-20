@@ -23,7 +23,7 @@ push na main ──▶ GitHub Actions (deploy.yml)
 3. **Certificado ACM em `us-east-1`** (obrigatório para CloudFront), validado por DNS:
    ```bash
    aws acm request-certificate --region us-east-1 \
-     --domain-name jorge.dev --subject-alternative-names www.jorge.dev \
+     --domain-name jorge.blog.br --subject-alternative-names www.jorge.blog.br \
      --validation-method DNS
    aws acm describe-certificate --region us-east-1 --certificate-arn <arn> \
      --query 'Certificate.DomainValidationOptions[].ResourceRecord'
@@ -37,7 +37,7 @@ push na main ──▶ GitHub Actions (deploy.yml)
 infra/aws/setup.sh
 
 # com domínio
-DOMAIN=jorge.dev ACM_CERT_ARN=arn:aws:acm:us-east-1:...:certificate/... \
+DOMAIN=jorge.blog.br ACM_CERT_ARN=arn:aws:acm:us-east-1:...:certificate/... \
 BUDGET_EMAIL=voce@exemplo.com infra/aws/setup.sh
 ```
 
