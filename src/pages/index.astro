@@ -1,25 +1,23 @@
 ---
 import { getCollection } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Card from "@/components/Card.astro";
-import LinkButton from "@/components/LinkButton.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
-const { posts: postsConfig } = config;
+const { perIndex } = config.posts;
 
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 
 const posts = await getCollection("posts");
 const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const listedPosts = sortedPosts.slice(0, perIndex);
+const hasMore = sortedPosts.length > perIndex;
 const homePath = getRelativeLocaleUrl(locale, "");
 ---
 
@@ -29,60 +27,34 @@ const homePath = getRelativeLocaleUrl(locale, "");
     id="main-content"
     data-layout="index"
     data-home-path={homePath}
-    class="app-layout"
+    class="app-layout py-6"
   >
-    <section id="hero" class="border-border border-b pt-10 pb-8">
-      <h1 class="font-serif text-4xl font-bold tracking-tight sm:text-5xl">
-        {config.site.title}
-      </h1>
-      <p class="mt-4 font-serif text-[19px] leading-[1.6]">
-        Programação e matemática, sem pressa: Ruby, TypeScript, AWS, álgebra,
-        probabilidade e o que mais estiver me tirando o sono na semana.
-      </p>
-    </section>
-
     {
-      featuredPosts.length > 0 && (
-        <section
-          id="featured"
-          class:list={[
-            "pt-8 pb-2",
-            { "border-border border-b": recentPosts.length > 0 },
-          ]}
-        >
-          <h2 class="text-muted-foreground font-sans text-[11px] font-bold tracking-[0.2em] uppercase">
-            {t.home.featured}
-          </h2>
-          <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
-            ))}
-          </ul>
-        </section>
+      listedPosts.length > 0 ? (
+        <ol class="post-list">
+          {listedPosts.map(data => (
+            <Card variant="h2" {...data} />
+          ))}
+        </ol>
+      ) : (
+        <p class="text-muted-foreground font-sans text-[13px]">
+          {t.home.empty}
+        </p>
       )
     }
 
     {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-8 pb-2">
-          <h2 class="text-muted-foreground font-sans text-[11px] font-bold tracking-[0.2em] uppercase">
-            {t.home.recentPosts}
-          </h2>
-          <ul>
-            {recentPosts.slice(0, postsConfig.perIndex).map(data => (
-              <Card variant="h3" {...data} />
-            ))}
-          </ul>
-        </section>
+      hasMore && (
+        <p class="mt-6 ps-8 font-sans text-[13px]">
+          <a
+            href={getRelativeLocaleUrl(locale, "posts/2")}
+            class="hover:text-hn underline underline-offset-4"
+          >
+            {t.home.more}
+          </a>
+        </p>
       )
     }
-
-    <div class="my-8 text-center font-sans text-[13px]">
-      <LinkButton href={getRelativeLocaleUrl(locale, "posts")}>
-        {t.home.allPosts}
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
   </main>
   <Footer />
 </Layout>

@@ -33,10 +33,9 @@ export interface UIStrings {
     page: string;
   };
   home: {
-    socialLinks: string;
-    featured: string;
-    recentPosts: string;
     allPosts: string;
+    more: string;
+    empty: string;
   };
   footer: {
     copyright: string;

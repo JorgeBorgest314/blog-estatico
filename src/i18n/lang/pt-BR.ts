@@ -35,10 +35,9 @@ export default {
     page: "Página",
   },
   home: {
-    socialLinks: "Redes sociais",
-    featured: "Destaques",
-    recentPosts: "Posts recentes",
     allPosts: "Todos os posts",
+    more: "Mais",
+    empty: "Nenhum post publicado ainda.",
   },
   footer: {
     copyright: "Copyright",
