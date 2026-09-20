@@ -55,6 +55,10 @@ draft: false
 
 Arquivos com prefixo `_` são ignorados pela collection.
 
+## Deploy
+
+Publicação em S3 + CloudFront via GitHub Actions a cada push na `main`. Arquitetura, provisionamento (`infra/aws/setup.sh`) e deploy manual em [infra/README.md](infra/README.md).
+
 ## Licença
 
 Código sob [MIT](LICENSE), derivado do AstroPaper (© Sat Naing). O conteúdo dos posts é © Jorge Borges.
