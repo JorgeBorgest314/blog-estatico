@@ -51,7 +51,7 @@ export default defineConfig({
       rehypePlugins: [rehypeKatex, rehypeCallouts],
     }),
     shikiConfig: {
-      theme: "github-dark",
+      theme: "github-dark-default",
       wrap: false,
       transformers: [
         transformerFileName({ style: "v2", hideDot: false }),
