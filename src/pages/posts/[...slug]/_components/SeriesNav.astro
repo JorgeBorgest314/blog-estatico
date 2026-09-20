@@ -1,0 +1,65 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getPostUrl } from "@/utils/getPostPaths";
+import type { Series } from "@/utils/getSeries";
+import { useTranslations, tplStr } from "@/i18n";
+import config from "@/config";
+
+type Props = {
+  series: Series;
+  currentId: string;
+};
+
+const { series, currentId } = Astro.props;
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const index = series.posts.findIndex(post => post.id === currentId);
+const previous = index > 0 ? series.posts[index - 1] : null;
+const next = index < series.posts.length - 1 ? series.posts[index + 1] : null;
+---
+
+<nav
+  data-pagefind-ignore
+  aria-label={series.name}
+  class="border-border bg-muted/40 mb-10 border px-4 py-3 font-sans text-[13px]"
+>
+  <p>
+    {tplStr(t.post.seriesPart, { n: index + 1, total: series.posts.length })}
+    {" "}
+    <a
+      href={getRelativeLocaleUrl(locale, `series/${series.slug}/`)}
+      class="hover:text-hn font-bold underline underline-offset-2"
+    >
+      {series.name}
+    </a>
+  </p>
+  {
+    (previous || next) && (
+      <ul class="text-muted-foreground mt-2 flex flex-col gap-1 sm:flex-row sm:justify-between">
+        {previous && (
+          <li>
+            <span>{t.post.previousInSeries}:</span>{" "}
+            <a
+              href={getPostUrl(previous.id, previous.filePath, locale)}
+              class="text-foreground hover:text-hn underline underline-offset-2"
+            >
+              {previous.data.title}
+            </a>
+          </li>
+        )}
+        {next && (
+          <li class="sm:text-end">
+            <span>{t.post.nextInSeries}:</span>{" "}
+            <a
+              href={getPostUrl(next.id, next.filePath, locale)}
+              class="text-foreground hover:text-hn underline underline-offset-2"
+            >
+              {next.data.title}
+            </a>
+          </li>
+        )}
+      </ul>
+    )
+  }
+</nav>

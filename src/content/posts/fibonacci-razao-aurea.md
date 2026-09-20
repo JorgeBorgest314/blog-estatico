@@ -2,6 +2,9 @@
 title: "Fibonacci, a razão áurea e o preço de uma recursão ingênua"
 description: "Por que a razão entre termos consecutivos de Fibonacci converge para φ, e por que a recursão direta custa exatamente esse mesmo φ elevado a n."
 pubDatetime: 2026-09-20T18:00:00-03:00
+category: matematica
+series: Recorrências
+seriesOrder: 1
 tags:
   - matematica
   - ruby
