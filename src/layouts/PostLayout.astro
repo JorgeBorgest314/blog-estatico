@@ -4,32 +4,53 @@ import config from "@/config";
 
 type Props = {
   title?: string;
+  headline?: string;
   description?: string;
   ogImage?: string;
   canonicalURL?: string;
   pubDatetime?: Date;
   modDatetime?: Date | null;
+  keywords?: string[];
+  section?: string;
 };
 
 const { site } = config;
 
-const { title, description, ogImage, canonicalURL, pubDatetime, modDatetime } =
-  Astro.props;
+const {
+  title,
+  headline,
+  description,
+  ogImage,
+  canonicalURL,
+  pubDatetime,
+  modDatetime,
+  keywords,
+  section,
+} = Astro.props;
+
+const pageUrl = canonicalURL ?? new URL(Astro.url.pathname, Astro.site).href;
+
+const author = {
+  "@type": "Person",
+  name: site.author,
+  ...(site.profile && { url: site.profile }),
+};
 
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  headline: title ?? site.title,
+  headline: headline ?? title ?? site.title,
+  description,
   image: ogImage,
+  url: pageUrl,
+  mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+  inLanguage: site.lang,
   ...(pubDatetime && { datePublished: pubDatetime.toISOString() }),
   ...(modDatetime && { dateModified: modDatetime.toISOString() }),
-  author: [
-    {
-      "@type": "Person",
-      name: site.author,
-      ...(site.profile && { url: site.profile }),
-    },
-  ],
+  ...(keywords?.length && { keywords: keywords.join(", ") }),
+  ...(section && { articleSection: section }),
+  author: [author],
+  publisher: author,
 };
 ---
 
