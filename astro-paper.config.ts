@@ -4,7 +4,7 @@ export default defineAstroPaperConfig({
   site: {
     url: "https://jorge.dev/",
     title: "Jorge",
-    description: "Blog sobre programação e matemática.",
+    description: "Blog sobre computação e matemática.",
     author: "Jorge Borges",
     profile: "https://github.com/JorgeLAB",
     ogImage: "default-og.jpg",
