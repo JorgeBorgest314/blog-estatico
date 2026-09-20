@@ -6,6 +6,9 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
   * {
     @apply border-border outline-accent/75;
     scrollbar-width: auto;
@@ -22,8 +25,12 @@
   }
 }
 
+@utility site-container {
+  @apply mx-auto w-full sm:w-[85%];
+}
+
 @utility max-w-app {
-  @apply max-w-3xl;
+  @apply max-w-2xl;
 }
 
 @utility app-layout {
@@ -31,7 +38,7 @@
 }
 
 @utility active-nav {
-  @apply underline decoration-wavy decoration-2 underline-offset-8;
+  @apply underline underline-offset-2;
 }
 
 :target {

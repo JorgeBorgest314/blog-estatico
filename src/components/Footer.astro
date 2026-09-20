@@ -1,7 +1,8 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import Socials from "./Socials.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { useTranslations } from "@/i18n";
+import config from "@/config";
 
 type Props = {
   noMarginTop?: boolean;
@@ -9,22 +10,46 @@ type Props = {
 
 const { noMarginTop = false, class: className, ...attrs } = Astro.props;
 
-const t = useTranslations(Astro.currentLocale);
+const { site, socials } = config;
+const locale = Astro.currentLocale ?? site.lang;
+const t = useTranslations(locale);
 const currentYear = new Date().getFullYear();
+
+const capitalize = (name: string) =>
+  name.charAt(0).toUpperCase() + name.slice(1);
+
+const links = [
+  { label: t.nav.about, href: getRelativeLocaleUrl(locale, "about") },
+  ...socials.map(({ name, url, linkTitle }) => ({
+    label: linkTitle ?? capitalize(name),
+    href: url,
+  })),
+];
 ---
 
 <footer
-  class:list={["app-layout", { "mt-auto": !noMarginTop }, className]}
+  class:list={[
+    "site-container border-hn border-t-2 py-4 text-center font-sans text-[10pt]",
+    { "mt-auto": !noMarginTop },
+    className,
+  ]}
   {...attrs}
 >
-  <div
-    class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"
-  >
-    <Socials />
-    <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row">
-      <span>{t.footer.copyright} &#169; {currentYear}</span>
-      <span class="hidden sm:inline">&nbsp;|&nbsp;</span>
-      <span>{t.footer.allRightsReserved}</span>
-    </div>
-  </div>
+  <nav class="text-muted-foreground flex flex-wrap justify-center gap-x-2">
+    {
+      links.map(({ label, href }, index) => (
+        <>
+          {index > 0 && <span aria-hidden="true">|</span>}
+          <a href={href} class="hover:text-foreground hover:underline">
+            {label}
+          </a>
+        </>
+      ))
+    }
+  </nav>
+  <p class="text-muted-foreground mt-1 text-[11px]">
+    &#169; {`${currentYear} ${site.author}`} &mdash; {
+      t.footer.allRightsReserved
+    }
+  </p>
 </footer>
