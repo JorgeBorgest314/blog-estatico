@@ -23,7 +23,7 @@ export default defineAstroPaperConfig({
     showArchives: true,
     showBackButton: false,
     editPost: { enabled: false },
-    search: "pagefind",
+    search: false,
   },
   socials: [
     { name: "github", url: "https://github.com/JorgeLAB", linkTitle: "GitHub" },
