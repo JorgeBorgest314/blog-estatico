@@ -8,6 +8,8 @@ export default {
     about: "About",
     archives: "Archives",
     search: "Search",
+    categories: "Categories",
+    series: "Series",
   },
   post: {
     by: "By",
@@ -23,6 +25,9 @@ export default {
     editPage: "Edit page",
     previousPost: "Previous Post",
     nextPost: "Next Post",
+    seriesPart: "Part {{n}} of {{total}} in the series",
+    previousInSeries: "Previous in series",
+    nextInSeries: "Next in series",
   },
   pagination: {
     prev: "Prev",
@@ -54,6 +59,14 @@ export default {
 
     searchTitle: "Search",
     searchDesc: "Search any article ...",
+
+    categoriesTitle: "Categories",
+    categoriesDesc: "The two big topics of this blog.",
+
+    seriesTitle: "Series",
+    seriesDesc: "Posts meant to be read in order.",
+    seriesPostCount: "{{count}} posts",
+    seriesPostCountOne: "1 post",
   },
   a11y: {
     skipToContent: "Skip to content",

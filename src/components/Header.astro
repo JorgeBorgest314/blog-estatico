@@ -5,6 +5,7 @@ import IconMoon from "@/assets/icons/IconMoon.svg";
 import { stripBase, stripLocale } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
+import { CATEGORY_LIST } from "@/utils/categories";
 
 const { site, features } = config;
 
@@ -15,18 +16,14 @@ const relativePath = stripBase(Astro.url.pathname).replace(/\/+$/, "") || "/";
 const currentPath = stripLocale(relativePath, locale);
 
 const isActive = (path: string) =>
-  currentPath === path || currentPath.split("/")[1] === path.split("/")[1];
+  currentPath === path || currentPath.startsWith(`${path}/`);
 
 const navLinks = [
-  { label: t.nav.posts, path: "posts" },
-  { label: t.nav.tags, path: "tags" },
-  ...(features.showArchives
-    ? [{ label: t.nav.archives, path: "archives" }]
-    : []),
+  ...CATEGORY_LIST.map(({ slug, name }) => ({
+    label: name,
+    path: `categorias/${slug}`,
+  })),
   { label: t.nav.about, path: "about" },
-  ...(features.search !== false
-    ? [{ label: t.nav.search, path: "search" }]
-    : []),
 ];
 ---
 

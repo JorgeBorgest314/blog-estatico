@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { getPostUrl } from "@/utils/getPostPaths";
 import { toTransitionName } from "@/utils/toTransitionName";
 import Datetime from "./Datetime.astro";
+import { CATEGORIES } from "@/utils/categories";
 
 type Props = {
   variant?: "h2" | "h3";
@@ -10,10 +11,19 @@ type Props = {
 
 const { variant: Heading = "h2", id, data, filePath } = Astro.props;
 
-const { title, description, ...props } = data;
+const { title, description, category, ...props } = data;
+const categoryInfo = CATEGORIES[category];
 ---
 
 <li class="border-border border-b py-5 last:border-b-0">
+  <p
+    class:list={[
+      "mb-1 font-sans text-[10px] font-bold tracking-[0.2em] uppercase",
+      categoryInfo.textClass,
+    ]}
+  >
+    {categoryInfo.name}
+  </p>
   <a
     href={getPostUrl(id, filePath, Astro.currentLocale)}
     class:list={[

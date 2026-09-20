@@ -6,21 +6,27 @@ import Footer from "@/components/Footer.astro";
 import Datetime from "@/components/Datetime.astro";
 import Tag from "@/components/Tag.astro";
 import { getPostSlug, getPostUrl } from "@/utils/getPostPaths";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
 import { useTranslations, tplStr } from "@/i18n";
 import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
+import SeriesNav from "./_components/SeriesNav.astro";
+import { CATEGORIES } from "@/utils/categories";
+import { getSeries, findSeriesOfPost, type Series } from "@/utils/getSeries";
 import config from "@/config";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
   const sortedPosts = getSortedPosts(posts);
+  const allSeries = getSeries(posts);
 
   return sortedPosts.map((post, index) => ({
     params: { slug: getPostSlug(post.id, post.filePath) },
     props: {
       post,
+      series: findSeriesOfPost(allSeries, post) ?? null,
       // sortedPosts is newest-first, so "older" (prev) is a higher index
       // and "newer" (next) is a lower index.
       prevPost:
@@ -51,11 +57,12 @@ type AdjacentPost = {
 
 type Props = {
   post: CollectionEntry<"posts">;
+  series: Series | null;
   prevPost: AdjacentPost;
   nextPost: AdjacentPost;
 };
 
-const { post, prevPost, nextPost } = Astro.props;
+const { post, series, prevPost, nextPost } = Astro.props;
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 
@@ -69,7 +76,10 @@ const {
   timezone,
   tags,
   author,
+  category,
 } = post.data;
+
+const categoryInfo = CATEGORIES[category];
 
 const { Content, remarkPluginFrontmatter } = await render(post);
 const readingTime = remarkPluginFrontmatter.readingTime as number | undefined;
@@ -108,9 +118,14 @@ const ogImage = ogImageUrl
   <main id="main-content" class="app-layout mt-14" data-pagefind-body>
     <header class="mb-12 text-center">
       <p
-        class="text-hn mb-4 font-sans text-[11px] font-bold tracking-[0.2em] uppercase"
+        class="mb-4 font-sans text-[11px] font-bold tracking-[0.2em] uppercase"
       >
-        {tags.join(" · ")}
+        <a
+          href={getRelativeLocaleUrl(locale, `categorias/${category}/`)}
+          class:list={["hover:underline", categoryInfo.textClass]}
+        >
+          {categoryInfo.name}
+        </a>
       </p>
       <h1
         style={{ viewTransitionName: toTransitionName(post.id) }}
@@ -139,6 +154,8 @@ const ogImage = ogImageUrl
         }
       </p>
     </header>
+
+    {series && <SeriesNav {series} currentId={post.id} />}
 
     <article id="article" class="app-prose w-full">
       <Content />

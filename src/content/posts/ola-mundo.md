@@ -2,6 +2,7 @@
 title: "Olá, mundo"
 description: "Primeiro post do blog, usado como placeholder enquanto o site é construído."
 pubDatetime: 2026-09-20T12:00:00-03:00
+category: computacao
 tags:
   - meta
 draft: false

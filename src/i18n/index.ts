@@ -1,6 +1,7 @@
 import type { UIStrings } from "./types";
 
 export { tplStr } from "./format";
+import { tplStr } from "./format";
 
 const modules = import.meta.glob<{ default: UIStrings }>("./lang/*.ts", {
   eager: true,
@@ -15,4 +16,10 @@ for (const [path, mod] of Object.entries(modules)) {
 /** Returns UI strings for the given locale, falling back to English. */
 export function useTranslations(locale: string = "en"): UIStrings {
   return translations[locale] ?? translations["en"];
+}
+
+export function postCountLabel(t: UIStrings, count: number): string {
+  return count === 1
+    ? t.pages.seriesPostCountOne
+    : tplStr(t.pages.seriesPostCount, { count });
 }
