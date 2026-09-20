@@ -9,6 +9,9 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { unified } from "@astrojs/markdown-remark";
 import remarkToc from "remark-toc";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import { remarkReadingTime } from "./src/utils/remarkReadingTime";
 import remarkCollapse from "remark-collapse";
 import rehypeCallouts from "rehype-callouts";
 import {
@@ -38,14 +41,15 @@ export default defineConfig({
   markdown: {
     processor: unified({
       remarkPlugins: [
+        remarkMath,
+        remarkReadingTime,
         remarkToc,
         [remarkCollapse, { test: "Table of contents" }],
       ],
-      rehypePlugins: [rehypeCallouts],
+      rehypePlugins: [rehypeKatex, rehypeCallouts],
     }),
     shikiConfig: {
-      themes: { light: "min-light", dark: "night-owl" },
-      defaultColor: false,
+      theme: "github-dark",
       wrap: false,
       transformers: [
         transformerFileName({ style: "v2", hideDot: false }),
