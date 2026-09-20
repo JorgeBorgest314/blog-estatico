@@ -159,6 +159,13 @@ if ! aws iam get-open-id-connect-provider --open-id-connect-provider-arn "$OIDC_
   aws iam create-open-id-connect-provider --url https://token.actions.githubusercontent.com \
     --client-id-list sts.amazonaws.com --thumbprint-list 6938fd4d98bab03faadb97b34396831e3780aea1 >/dev/null
 fi
+# O GitHub pode emitir o claim `sub` no formato imutável, com IDs
+# (repo:owner@ID/repo@ID:...); a API informa o prefixo em uso.
+SUB_PREFIX="$(gh api "repos/$GITHUB_REPO/actions/oidc/customization/sub" --jq .sub_claim_prefix 2>/dev/null || true)"
+SUB_PATTERNS="\"repo:$GITHUB_REPO:*\""
+if [ -n "$SUB_PREFIX" ] && [ "$SUB_PREFIX" != "repo:$GITHUB_REPO" ]; then
+  SUB_PATTERNS="$SUB_PATTERNS, \"$SUB_PREFIX:*\""
+fi
 TRUST_POLICY="$(cat <<JSON
 {
   "Version": "2012-10-17",
@@ -168,7 +175,7 @@ TRUST_POLICY="$(cat <<JSON
     "Action": "sts:AssumeRoleWithWebIdentity",
     "Condition": {
       "StringEquals": {"token.actions.githubusercontent.com:aud": "sts.amazonaws.com"},
-      "StringLike": {"token.actions.githubusercontent.com:sub": "repo:$GITHUB_REPO:*"}
+      "StringLike": {"token.actions.githubusercontent.com:sub": [$SUB_PATTERNS]}
     }
   }]
 }
