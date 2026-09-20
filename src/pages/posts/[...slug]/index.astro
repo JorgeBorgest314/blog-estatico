@@ -125,7 +125,11 @@ const ogImage = ogImageUrl
       >
         <a
           href={getRelativeLocaleUrl(locale, `categorias/${category}/`)}
-          class:list={["hover:underline", categoryInfo.textClass]}
+          class:list={[
+            "hover:underline",
+            categoryInfo.textClass,
+            categoryInfo.hoverClass,
+          ]}
         >
           {categoryInfo.name}
         </a>
@@ -167,7 +171,11 @@ const ogImage = ogImageUrl
     <footer class="text-muted-foreground mt-12 font-sans text-[12px]">
       <ul class="flex flex-wrap items-center gap-x-2">
         <li class="tracking-wider uppercase">{t.post.tagLabel}:</li>
-        {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
+        {
+          tags.map(tag => (
+            <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" {category} />
+          ))
+        }
       </ul>
     </footer>
 

@@ -29,25 +29,28 @@ const categories = CATEGORY_LIST.map(category => ({
   <Main pageTitle={t.pages.categoriesTitle} pageDesc={t.pages.categoriesDesc}>
     <ul>
       {
-        categories.map(({ slug, name, description, textClass, count }) => (
-          <li class="border-border border-b py-5 last:border-b-0">
-            <a
-              href={getRelativeLocaleUrl(locale, `categorias/${slug}/`)}
-              class:list={[
-                "hover:text-hn inline-block font-serif text-[22px] leading-tight font-bold",
-                textClass,
-              ]}
-            >
-              {name}
-            </a>
-            <p class="text-muted-foreground mt-1 font-sans text-[12px]">
-              {postCountLabel(t, count)}
-            </p>
-            <p class="mt-2 font-serif text-[16px] leading-[1.6]">
-              {description}
-            </p>
-          </li>
-        ))
+        categories.map(
+          ({ slug, name, description, textClass, hoverClass, count }) => (
+            <li class="border-border border-b py-5 last:border-b-0">
+              <a
+                href={getRelativeLocaleUrl(locale, `categorias/${slug}/`)}
+                class:list={[
+                  "inline-block font-serif text-[22px] leading-tight font-bold",
+                  textClass,
+                  hoverClass,
+                ]}
+              >
+                {name}
+              </a>
+              <p class="text-muted-foreground mt-1 font-sans text-[12px]">
+                {postCountLabel(t, count)}
+              </p>
+              <p class="mt-2 font-serif text-[16px] leading-[1.6]">
+                {description}
+              </p>
+            </li>
+          )
+        )
       }
     </ul>
   </Main>

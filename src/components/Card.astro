@@ -27,7 +27,8 @@ const categoryInfo = CATEGORIES[category];
   <a
     href={getPostUrl(id, filePath, Astro.currentLocale)}
     class:list={[
-      "text-foreground hover:text-hn inline-block font-serif text-[22px] leading-tight font-bold",
+      "text-foreground inline-block font-serif text-[22px] leading-tight font-bold",
+      categoryInfo.hoverClass,
       "focus-visible:no-underline",
     ]}
   >
