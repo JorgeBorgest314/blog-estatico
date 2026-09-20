@@ -35,3 +35,6 @@ compose.override.yaml
 # Agent state file (local to each project)
 .agent_obsidian
 .obsidian/
+
+# Claude Code local config
+.claude/
