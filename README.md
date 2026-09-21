@@ -41,19 +41,23 @@ docs/astropaper/        # README e posts-guia do template, para consulta
 
 ## Escrevendo um post
 
-Crie `src/content/posts/<slug>.md` com o frontmatter:
+1. Copie [`templates/post.md`](templates/post.md) para `src/content/posts/<slug>.md` (o nome do arquivo vira a URL: `/posts/<slug>/`).
+2. Preencha o frontmatter:
 
-```yaml
----
-title: "Título"
-description: "Resumo de até 155 caracteres."
-pubDatetime: 2026-09-20T12:00:00-03:00
-tags: [ruby, matematica]
-draft: false
----
-```
+   | Campo         | Obrigatório | Valores                                                           |
+   | ------------- | ----------- | ----------------------------------------------------------------- |
+   | `title`       | sim         | texto                                                             |
+   | `description` | sim         | até 155 caracteres                                                |
+   | `pubDatetime` | sim         | `AAAA-MM-DDTHH:MM:SS-03:00`; data futura só publica quando chegar |
+   | `category`    | sim         | `computacao` ou `matematica`                                      |
+   | `tags`        | não         | lista livre                                                       |
+   | `series`      | não         | nome da série; `seriesOrder` (número) define a posição            |
+   | `draft`       | não         | `true` esconde o post em qualquer ambiente                        |
 
-Arquivos com prefixo `_` são ignorados pela collection.
+3. Escreva em Markdown: `$…$`/`$$…$$` para matemática, fences com `file=nome.ext` para código com rótulo, `[^1]` para notas.
+4. `npm run dev` para conferir em `http://localhost:4321`; depois `git push` na `main` (ou PR) — o deploy é automático em ~2 min.
+
+O `.md` não vai para o S3: quem publica é o GitHub Actions, que gera o HTML e sincroniza o bucket.
 
 ## Deploy
 
