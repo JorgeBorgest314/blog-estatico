@@ -37,6 +37,10 @@
   @apply max-w-app mx-auto w-full px-4;
 }
 
+@utility post-list {
+  @apply marker:text-muted-foreground list-decimal ps-8 marker:font-sans marker:text-[13px];
+}
+
 @utility active-nav {
   @apply underline underline-offset-2;
 }

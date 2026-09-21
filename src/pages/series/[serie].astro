@@ -34,19 +34,8 @@ const t = useTranslations(locale);
     pageTitle={series.name}
     pageDesc={postCountLabel(t, series.posts.length)}
   >
-    <ol class="list-none">
-      {
-        series.posts.map((post, index) => (
-          <li class="flex gap-4">
-            <span class="text-hn mt-5 shrink-0 font-sans text-[13px] font-bold tabular-nums">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <ul class="min-w-0 flex-1">
-              <Card {...post} />
-            </ul>
-          </li>
-        ))
-      }
+    <ol class="post-list">
+      {series.posts.map(post => <Card {...post} />)}
     </ol>
   </Main>
 

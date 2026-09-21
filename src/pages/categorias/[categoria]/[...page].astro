@@ -41,9 +41,9 @@ const { page, category } = Astro.props;
   <Breadcrumb />
 
   <Main pageTitle={category.name} pageDesc={category.description}>
-    <ul>
+    <ol class="post-list">
       {page.data.map(data => <Card {...data} />)}
-    </ul>
+    </ol>
   </Main>
 
   <Pagination {page} />
