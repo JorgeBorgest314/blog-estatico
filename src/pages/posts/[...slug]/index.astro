@@ -140,14 +140,13 @@ const ogImage = ogImageUrl
       >
         {title}
       </h1>
+      <p class="text-muted-foreground font-sans text-[13px] leading-relaxed">
+        {t.post.by}{" "}
+        <span class="text-foreground font-semibold">{author}</span>
+      </p>
       <p
-        class="text-muted-foreground flex flex-wrap items-center justify-center gap-x-2 font-sans text-[13px] leading-relaxed"
+        class="text-muted-foreground mt-1 flex flex-wrap items-center justify-center gap-x-2 font-sans text-[13px] leading-relaxed"
       >
-        <span>
-          {t.post.by}{" "}
-          <span class="text-foreground font-semibold">{author}</span>
-        </span>
-        <span aria-hidden="true">·</span>
         <Datetime {pubDatetime} {modDatetime} {timezone} />
         {
           readingTime && (
