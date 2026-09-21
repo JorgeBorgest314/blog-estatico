@@ -1,6 +1,6 @@
 ---
 title: "Título do post"
-description: "Resumo de uma ou duas frases (até 155 caracteres); aparece no Google, no RSS e ao compartilhar."
+description: "Subtítulo: uma ou duas frases (até 155 caracteres). Aparece abaixo do título nas listagens, no Google, no RSS e ao compartilhar."
 pubDatetime: 2026-09-21T10:00:00-03:00
 category: computacao
 tags:
