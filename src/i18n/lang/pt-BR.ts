@@ -10,9 +10,15 @@ export default {
     search: "Busca",
     categories: "Categorias",
     series: "Séries",
+    graph: "Grafo",
   },
   post: {
     by: "Por",
+    video: "A palestra",
+    tableOfContents: "Sumário",
+    versions: "Versões",
+    versionLabel: "v{{n}}",
+    watchOnYouTube: "Assistir no YouTube",
     readingTime: "{{minutes}} min de leitura",
     publishedAt: "Publicado em",
     updatedAt: "Atualizado em",
@@ -21,6 +27,8 @@ export default {
     sharePostViaEmail: "Compartilhar este post por e-mail",
     tagLabel: "Tags",
     backToTop: "Voltar ao topo",
+    wip: "Em construção: este texto ainda está em revisão e vai mudar.",
+    wipShort: "Em construção",
     goBack: "Voltar",
     editPage: "Editar página",
     previousPost: "Post anterior",
@@ -38,6 +46,22 @@ export default {
     allPosts: "Todos os posts",
     more: "Mais",
     empty: "Nenhum post publicado ainda.",
+  },
+  timeline: {
+    hint: "Passe o mouse ou navegue pelo teclado para ler cada post",
+  },
+  graph: {
+    empty:
+      "Nenhum post publicado ainda — o grafo aparece com o primeiro texto.",
+    hint: "Arraste os nós · role para aproximar · duplo clique reposiciona",
+    reset: "Reposicionar",
+    ariaLabel: "Grafo de posts, categorias e tags",
+    fallback:
+      "Grafo interativo que liga cada post à sua categoria e às suas tags. As mesmas ligações estão disponíveis em texto nas páginas de tags e de categorias.",
+    legendTags: "Tags",
+    nodePost: "Post",
+    nodeTag: "Tag",
+    nodeCategory: "Categoria",
   },
   footer: {
     copyright: "Copyright",
@@ -64,8 +88,12 @@ export default {
 
     seriesTitle: "Séries",
     seriesDesc: "Posts pensados para serem lidos em sequência.",
+
     seriesPostCount: "{{count}} posts",
     seriesPostCountOne: "1 post",
+
+    graphTitle: "Grafo",
+    graphDesc: "Como os posts se ligam pelas tags e pelas categorias.",
   },
   a11y: {
     skipToContent: "Pular para o conteúdo",

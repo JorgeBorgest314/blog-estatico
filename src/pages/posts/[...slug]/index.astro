@@ -13,6 +13,11 @@ import { toTransitionName } from "@/utils/toTransitionName";
 import { useTranslations, tplStr } from "@/i18n";
 import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
 import SeriesNav from "./_components/SeriesNav.astro";
+import VideoEmbed from "@/components/VideoEmbed.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import VersionHistory from "@/components/VersionHistory.astro";
+import Timeline from "@/components/Timeline.astro";
+import BackToTop from "@/components/BackToTop.astro";
 import { CATEGORIES } from "@/utils/categories";
 import { getSeries, findSeriesOfPost, type Series } from "@/utils/getSeries";
 import config from "@/config";
@@ -77,11 +82,17 @@ const {
   tags,
   author,
   category,
+  subtitle,
+  video,
+  versions,
+  timeline,
+  wip,
+  wipNote,
 } = post.data;
 
 const categoryInfo = CATEGORIES[category];
 
-const { Content, remarkPluginFrontmatter } = await render(post);
+const { Content, headings, remarkPluginFrontmatter } = await render(post);
 const readingTime = remarkPluginFrontmatter.readingTime as number | undefined;
 
 let ogImageUrl: string | undefined;
@@ -119,7 +130,7 @@ const ogImage = ogImageUrl
   <Header />
 
   <main id="main-content" class="app-layout mt-14" data-pagefind-body>
-    <header class="mb-12 text-center">
+    <header class="mb-12">
       <p
         class="mb-4 font-sans text-[11px] font-bold tracking-[0.2em] uppercase"
       >
@@ -140,12 +151,24 @@ const ogImage = ogImageUrl
       >
         {title}
       </h1>
+      {
+        subtitle && (
+          <p class="text-foreground mb-5 font-serif text-[22px] leading-snug">
+            {subtitle}
+          </p>
+        )
+      }
+      <p
+        class="text-muted-foreground mb-6 max-w-xl font-serif text-[16px] leading-[1.5]"
+      >
+        {description}
+      </p>
       <p class="text-muted-foreground font-sans text-[13px] leading-relaxed">
         {t.post.by}{" "}
         <span class="text-foreground font-semibold">{author}</span>
       </p>
       <p
-        class="text-muted-foreground mt-1 flex flex-wrap items-center justify-center gap-x-2 font-sans text-[13px] leading-relaxed"
+        class="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 font-sans text-[13px] leading-relaxed"
       >
         <Datetime {pubDatetime} {modDatetime} {timezone} />
         {
@@ -161,11 +184,28 @@ const ogImage = ogImageUrl
       </p>
     </header>
 
+    {
+      wip && (
+        <aside class="border-hn bg-hn/10 text-foreground mb-8 flex gap-x-2 border-s-4 px-4 py-3 font-sans text-[13px] leading-snug">
+          <span aria-hidden="true">⚠️</span>
+          <span>{wipNote ?? t.post.wip}</span>
+        </aside>
+      )
+    }
+
+    <TableOfContents {headings} />
+
+    {versions && <VersionHistory {versions} />}
+
     {series && <SeriesNav {series} currentId={post.id} />}
+
+    {timeline && <Timeline {timeline} />}
 
     <article id="article" class="app-prose w-full">
       <Content />
     </article>
+
+    {video && <VideoEmbed {...video} />}
 
     <footer class="text-muted-foreground mt-12 font-sans text-[12px]">
       <ul class="flex flex-wrap items-center gap-x-2">
@@ -182,13 +222,16 @@ const ogImage = ogImageUrl
 
     <AdjacentPostNav {prevPost} {nextPost} />
   </main>
+  <BackToTop />
   <Footer />
 </PostLayout>
 
 <script is:inline data-astro-rerun>
   function addHeadingLinks() {
     const headings = Array.from(
-      document.querySelectorAll("h2, h3, h4, h5, h6")
+      document.querySelectorAll(
+        "#article h2, #article h3, #article h4, #article h5, #article h6"
+      )
     );
     for (const heading of headings) {
       heading.classList.add("group");

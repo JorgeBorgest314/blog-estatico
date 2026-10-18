@@ -1,0 +1,32 @@
+---
+type Props = {
+  label: string;
+  side: "start" | "end";
+  class?: string;
+};
+
+const { label, side, class: className } = Astro.props;
+---
+
+<details
+  data-pagefind-ignore
+  class:list={[
+    "border-border mb-8 border font-sans",
+    "xl:fixed xl:top-28 xl:z-30 xl:mb-0 xl:w-56 xl:border-0",
+    side === "start"
+      ? "xl:left-[max(1rem,calc(50%-37rem))]"
+      : "xl:right-[max(1rem,calc(50%-37rem))]",
+    className,
+  ]}
+>
+  <summary
+    class="text-muted-foreground hover:text-hn cursor-pointer px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase xl:px-0"
+  >
+    {label}
+  </summary>
+  <div
+    class="border-border border-t px-4 py-3 xl:max-h-[70vh] xl:overflow-y-auto xl:border-t-0 xl:px-0 xl:pt-2"
+  >
+    <slot />
+  </div>
+</details>

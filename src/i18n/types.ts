@@ -8,9 +8,15 @@ export interface UIStrings {
     search: string;
     categories: string;
     series: string;
+    graph: string;
   };
   post: {
     by: string;
+    video: string;
+    tableOfContents: string;
+    versions: string;
+    versionLabel: string;
+    watchOnYouTube: string;
     readingTime: string;
     publishedAt: string;
     updatedAt: string;
@@ -19,6 +25,8 @@ export interface UIStrings {
     sharePostViaEmail: string;
     tagLabel: string;
     backToTop: string;
+    wip: string;
+    wipShort: string;
     goBack: string;
     editPage: string;
     previousPost: string;
@@ -36,6 +44,20 @@ export interface UIStrings {
     allPosts: string;
     more: string;
     empty: string;
+  };
+  timeline: {
+    hint: string;
+  };
+  graph: {
+    empty: string;
+    hint: string;
+    reset: string;
+    ariaLabel: string;
+    fallback: string;
+    legendTags: string;
+    nodePost: string;
+    nodeTag: string;
+    nodeCategory: string;
   };
   footer: {
     copyright: string;
@@ -64,6 +86,9 @@ export interface UIStrings {
     seriesDesc: string;
     seriesPostCount: string;
     seriesPostCountOne: string;
+
+    graphTitle: string;
+    graphDesc: string;
   };
   a11y: {
     skipToContent: string;

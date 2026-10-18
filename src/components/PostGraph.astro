@@ -1,0 +1,533 @@
+---
+import type { PostGraph } from "@/utils/getPostGraph";
+import { CATEGORY_LIST } from "@/utils/categories";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+type Props = {
+  graph: PostGraph;
+};
+
+const { graph } = Astro.props;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const countOf = (kind: "post" | "tag" | "category") =>
+  graph.nodes.filter(node => node.kind === kind).length;
+---
+
+{
+  graph.nodes.length === 0 ? (
+    <p class="text-muted-foreground font-sans text-[13px]">{t.graph.empty}</p>
+  ) : (
+    <figure
+      id="post-graph"
+      class="border-border relative mb-6 border font-sans"
+      data-graph={JSON.stringify(graph)}
+      data-label-post={t.graph.nodePost}
+      data-label-tag={t.graph.nodeTag}
+      data-label-category={t.graph.nodeCategory}
+    >
+      <svg
+        class="block h-[60vh] max-h-[640px] min-h-[380px] w-full touch-pan-y"
+        role="group"
+        aria-label={t.graph.ariaLabel}
+      >
+        <g class="graph-viewport">
+          <g class="graph-links" />
+          <g class="graph-nodes" />
+        </g>
+      </svg>
+
+      <button
+        type="button"
+        data-graph-reset
+        class="text-muted-foreground hover:text-hn border-border bg-background absolute end-2 top-2 border px-2 py-1 text-[10px] tracking-[0.1em] uppercase"
+      >
+        {t.graph.reset}
+      </button>
+
+      <figcaption class="border-border text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 border-t px-3 py-2 text-[11px]">
+        {CATEGORY_LIST.map(({ slug, name }) => (
+          <span class="flex items-center gap-x-1.5">
+            <span class={`graph-key graph-key-${slug}`} aria-hidden="true" />
+            {name}
+          </span>
+        ))}
+        <span class="flex items-center gap-x-1.5">
+          <span class="graph-key graph-key-tag" aria-hidden="true" />
+          {t.graph.legendTags} ({countOf("tag")})
+        </span>
+        <span class="ms-auto">{t.graph.hint}</span>
+      </figcaption>
+    </figure>
+  )
+}
+
+{graph.nodes.length > 0 && <p class="sr-only">{t.graph.fallback}</p>}
+
+<style is:global>
+  #post-graph {
+    --graph-link: var(--border);
+    --graph-tag: var(--muted-foreground);
+    --graph-computacao: #1d4ed8;
+    --graph-matematica: #b91c1c;
+  }
+
+  [data-theme="dark"] #post-graph {
+    --graph-computacao: #60a5fa;
+    --graph-matematica: #f87171;
+  }
+
+  #post-graph svg {
+    cursor: grab;
+  }
+
+  #post-graph svg:active {
+    cursor: grabbing;
+  }
+
+  #post-graph .graph-edge {
+    stroke: var(--graph-link);
+    stroke-width: 1;
+    transition: stroke 0.15s ease-out;
+  }
+
+  #post-graph .graph-dot {
+    stroke: var(--background);
+    stroke-width: 1.5;
+    transition:
+      fill 0.15s ease-out,
+      opacity 0.15s ease-out;
+  }
+
+  #post-graph .graph-node[data-kind="tag"] .graph-dot {
+    fill: var(--graph-tag);
+  }
+
+  #post-graph .graph-node[data-category="computacao"] .graph-dot {
+    fill: var(--graph-computacao);
+  }
+
+  #post-graph .graph-node[data-category="matematica"] .graph-dot {
+    fill: var(--graph-matematica);
+  }
+
+  #post-graph .graph-node[data-kind="category"] .graph-dot {
+    stroke: var(--foreground);
+  }
+
+  #post-graph .graph-label {
+    fill: var(--foreground);
+    stroke: var(--background);
+    stroke-width: 3px;
+    paint-order: stroke;
+    font-size: 11px;
+    text-anchor: middle;
+    pointer-events: none;
+    transition: opacity 0.15s ease-out;
+  }
+
+  #post-graph .graph-node[data-kind="tag"] .graph-label {
+    fill: var(--muted-foreground);
+    font-size: 10px;
+  }
+
+  #post-graph .graph-node[data-kind="post"] .graph-label {
+    font-weight: 700;
+  }
+
+  #post-graph .graph-node a {
+    cursor: pointer;
+  }
+
+  #post-graph .graph-node a:focus-visible {
+    outline: none;
+  }
+
+  #post-graph .graph-node a:focus-visible .graph-dot {
+    stroke: var(--color-hn);
+    stroke-width: 3;
+  }
+
+  /* Hover/focus: keep the node and its neighbours, fade everything else */
+  #post-graph.is-focused .graph-node,
+  #post-graph.is-focused .graph-edge {
+    opacity: 0.15;
+  }
+
+  #post-graph.is-focused .graph-node.is-near,
+  #post-graph.is-focused .graph-edge.is-near {
+    opacity: 1;
+  }
+
+  #post-graph.is-focused .graph-edge.is-near {
+    stroke: var(--color-hn);
+  }
+
+  #post-graph .graph-node.is-active .graph-dot {
+    fill: var(--color-hn);
+  }
+
+  /* Labels get in the way when zoomed out */
+  #post-graph.is-zoomed-out .graph-label {
+    opacity: 0;
+  }
+
+  #post-graph .graph-key {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+  }
+
+  #post-graph .graph-key-tag {
+    background: var(--graph-tag);
+  }
+
+  #post-graph .graph-key-computacao {
+    background: var(--graph-computacao);
+  }
+
+  #post-graph .graph-key-matematica {
+    background: var(--graph-matematica);
+  }
+</style>
+
+<script>
+  import {
+    forceCenter,
+    forceCollide,
+    forceLink,
+    forceManyBody,
+    forceSimulation,
+    forceX,
+    forceY,
+    type SimulationLinkDatum,
+    type SimulationNodeDatum,
+  } from "d3-force";
+  import { select } from "d3-selection";
+  import { drag } from "d3-drag";
+  import { zoom, zoomIdentity, type ZoomBehavior } from "d3-zoom";
+  import type { GraphNode, PostGraph } from "@/utils/getPostGraph";
+
+  type SimNode = GraphNode & SimulationNodeDatum;
+  type SimLink = SimulationLinkDatum<SimNode>;
+
+  const radiusOf = (node: SimNode) => {
+    const base =
+      node.kind === "category" ? 7 : node.kind === "post" ? 5.5 : 3.5;
+    return base + Math.sqrt(node.degree) * 2.4;
+  };
+
+  const truncate = (label: string, max: number) =>
+    label.length > max ? `${label.slice(0, max - 1)}…` : label;
+
+  /** Label budget: a phone-sized canvas cannot hold a full post title. */
+  const labelLimit = (node: SimNode, width: number) => {
+    if (width >= 560) return node.kind === "tag" ? 22 : 30;
+    return node.kind === "tag" ? 12 : 18;
+  };
+
+  /**
+   * Layout gets proportionally tighter on narrow canvases, so the graph still
+   * fits without shrinking the labels into illegibility.
+   */
+  const spreadOf = (width: number) => Math.min(1, Math.max(0.6, width / 860));
+
+  const endpointId = (endpoint: SimLink["source"]) =>
+    typeof endpoint === "object" ? (endpoint as SimNode).id : String(endpoint);
+
+  function renderGraph(figure: HTMLElement) {
+    const raw = figure.dataset.graph;
+    if (!raw) return;
+
+    const { nodes: rawNodes, links: rawLinks } = JSON.parse(raw) as PostGraph;
+    const nodes: SimNode[] = rawNodes.map(node => ({ ...node }));
+    const links: SimLink[] = rawLinks.map(link => ({ ...link }));
+
+    const labels = {
+      post: figure.dataset.labelPost ?? "Post",
+      tag: figure.dataset.labelTag ?? "Tag",
+      category: figure.dataset.labelCategory ?? "Category",
+    };
+
+    const svgEl = figure.querySelector("svg");
+    if (!svgEl) return;
+
+    const svg = select(svgEl);
+    const viewport = svg.select<SVGGElement>(".graph-viewport");
+
+    let width = svgEl.clientWidth || 800;
+    let height = svgEl.clientHeight || 480;
+
+    // Neighbour lookup, so hovering a node can fade the rest out
+    const neighbours = new Map<string, Set<string>>();
+    for (const node of nodes) neighbours.set(node.id, new Set([node.id]));
+    for (const link of links) {
+      const source = endpointId(link.source);
+      const target = endpointId(link.target);
+      neighbours.get(source)?.add(target);
+      neighbours.get(target)?.add(source);
+    }
+
+    const edge = viewport
+      .select(".graph-links")
+      .selectAll<SVGLineElement, SimLink>("line")
+      .data(links)
+      .join("line")
+      .attr("class", "graph-edge");
+
+    const node = viewport
+      .select(".graph-nodes")
+      .selectAll<SVGGElement, SimNode>("g.graph-node")
+      .data(nodes, d => d.id)
+      .join("g")
+      .attr("class", "graph-node")
+      .attr("data-id", d => d.id)
+      .attr("data-kind", d => d.kind)
+      .attr("data-category", d => d.category ?? null);
+
+    const anchor = node
+      .append("a")
+      .attr("href", d => d.url)
+      .attr("aria-label", d => `${labels[d.kind]}: ${d.label}`);
+
+    anchor
+      .append("circle")
+      .attr("class", "graph-dot")
+      .attr("r", d => radiusOf(d));
+
+    anchor.append("title").text(d => d.label);
+
+    anchor
+      .append("text")
+      .attr("class", "graph-label")
+      .attr("dy", d => radiusOf(d) + 11)
+      .text(d => truncate(d.label, labelLimit(d, width)));
+
+    // --- simulation ------------------------------------------------------
+    let spread = spreadOf(width);
+
+    const linkDistance = (link: SimLink) =>
+      (endpointId(link.target).startsWith("category:") ? 105 : 78) * spread;
+
+    const collideRadius = (d: SimNode) =>
+      // Post titles are long, so their labels need more room than the dot
+      radiusOf(d) + (d.kind === "post" ? 36 : 20) * spread;
+
+    const simulation = forceSimulation<SimNode>(nodes)
+      .force(
+        "link",
+        forceLink<SimNode, SimLink>(links)
+          .id(d => d.id)
+          .distance(linkDistance)
+          .strength(0.45)
+      )
+      .force(
+        "charge",
+        forceManyBody()
+          .strength(-340 * spread)
+          .distanceMax(500)
+      )
+      .force("collide", forceCollide<SimNode>(collideRadius))
+      .force("center", forceCenter(width / 2, height / 2))
+      .force("x", forceX(width / 2).strength(0.03))
+      .force("y", forceY(height / 2).strength(0.04));
+
+    // Keeps framing the graph until the reader pans, zooms or drags a node
+    let autoFit = true;
+
+    const draw = () => {
+      edge
+        .attr("x1", d => (d.source as SimNode).x ?? 0)
+        .attr("y1", d => (d.source as SimNode).y ?? 0)
+        .attr("x2", d => (d.target as SimNode).x ?? 0)
+        .attr("y2", d => (d.target as SimNode).y ?? 0);
+      node.attr("transform", d => `translate(${d.x ?? 0},${d.y ?? 0})`);
+      if (autoFit) fitToView();
+    };
+
+    // --- highlight -------------------------------------------------------
+    const highlight = (active: SimNode | null) => {
+      figure.classList.toggle("is-focused", Boolean(active));
+      if (!active) {
+        node.classed("is-near", false).classed("is-active", false);
+        edge.classed("is-near", false);
+        return;
+      }
+      const near = neighbours.get(active.id) ?? new Set([active.id]);
+      node
+        .classed("is-near", d => near.has(d.id))
+        .classed("is-active", d => d.id === active.id);
+      edge.classed("is-near", d => {
+        const source = endpointId(d.source);
+        const target = endpointId(d.target);
+        return (
+          (source === active.id && near.has(target)) ||
+          (target === active.id && near.has(source))
+        );
+      });
+    };
+
+    node
+      .on("mouseenter", (_event, d) => highlight(d))
+      .on("mouseleave", () => highlight(null));
+    anchor
+      .on("focus", (_event, d) => highlight(d))
+      .on("blur", () => highlight(null));
+
+    // --- drag ------------------------------------------------------------
+    let dragged = false;
+
+    node.call(
+      drag<SVGGElement, SimNode>()
+        .on("start", (event, d) => {
+          dragged = false;
+          autoFit = false;
+          if (!event.active) simulation.alphaTarget(0.2).restart();
+          d.fx = d.x;
+          d.fy = d.y;
+        })
+        .on("drag", (event, d) => {
+          dragged = true;
+          d.fx = event.x;
+          d.fy = event.y;
+        })
+        .on("end", (event, d) => {
+          if (!event.active) simulation.alphaTarget(0);
+          d.fx = null;
+          d.fy = null;
+        })
+    );
+
+    // A drag that ends on a node must not navigate
+    anchor.on("click", event => {
+      if (dragged) event.preventDefault();
+    });
+
+    // --- zoom / pan ------------------------------------------------------
+    const zoomBehaviour: ZoomBehavior<SVGSVGElement, unknown> = zoom<
+      SVGSVGElement,
+      unknown
+    >()
+      .scaleExtent([0.35, 4])
+      .filter(event => !event.ctrlKey && event.type !== "dblclick")
+      .on("zoom", event => {
+        if (event.sourceEvent) autoFit = false;
+        viewport.attr("transform", event.transform.toString());
+        figure.classList.toggle("is-zoomed-out", event.transform.k < 0.55);
+      });
+
+    svg.call(zoomBehaviour);
+
+    /** Frames the whole graph in the canvas, however many nodes there are. */
+    const fitToView = () => {
+      if (nodes.length === 0) return;
+      const xs = nodes.map(d => d.x ?? 0);
+      const ys = nodes.map(d => d.y ?? 0);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+
+      const padding = 56; // room for the labels, which sit outside the dots
+      const scale = Math.min(
+        Math.max(
+          Math.min(
+            (width - padding * 2) / Math.max(maxX - minX, 1),
+            (height - padding * 2) / Math.max(maxY - minY, 1)
+          ),
+          0.6
+        ),
+        1.4
+      );
+
+      const transform = zoomIdentity
+        .translate(
+          width / 2 - (scale * (minX + maxX)) / 2,
+          height / 2 - (scale * (minY + maxY)) / 2
+        )
+        .scale(scale);
+
+      svg.call(zoomBehaviour.transform, transform);
+    };
+
+    simulation.on("tick", draw);
+    simulation.on("end", () => {
+      if (autoFit) fitToView();
+    });
+
+    // No animation for readers who asked for less motion: settle, then paint
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      simulation.stop();
+      simulation.tick(300);
+      draw();
+    }
+
+    const reframe = () => {
+      autoFit = true;
+      fitToView();
+    };
+
+    svg.on("dblclick.reset", reframe);
+    figure
+      .querySelector<HTMLButtonElement>("[data-graph-reset]")
+      ?.addEventListener("click", reframe);
+
+    // --- resize ----------------------------------------------------------
+    const observer = new ResizeObserver(() => {
+      const nextWidth = svgEl.clientWidth || width;
+      const nextHeight = svgEl.clientHeight || height;
+      if (nextWidth === width && nextHeight === height) return;
+      width = nextWidth;
+      height = nextHeight;
+      spread = spreadOf(width);
+      autoFit = true;
+      node
+        .select<SVGTextElement>("text")
+        .text(d => truncate(d.label, labelLimit(d, width)));
+      simulation
+        .force(
+          "link",
+          forceLink<SimNode, SimLink>(links)
+            .id(d => d.id)
+            .distance(linkDistance)
+            .strength(0.45)
+        )
+        .force(
+          "charge",
+          forceManyBody()
+            .strength(-340 * spread)
+            .distanceMax(500)
+        )
+        .force("collide", forceCollide<SimNode>(collideRadius))
+        .force("center", forceCenter(width / 2, height / 2))
+        .force("x", forceX(width / 2).strength(0.03))
+        .force("y", forceY(height / 2).strength(0.04))
+        .alpha(0.3)
+        .restart();
+    });
+    observer.observe(svgEl);
+
+    // Astro's client router swaps the DOM; drop the simulation with it
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        simulation.stop();
+        observer.disconnect();
+      },
+      { once: true }
+    );
+  }
+
+  // `astro:page-load` fires on the first load and after every client-side
+  // navigation, so it is the only hook needed here.
+  document.addEventListener("astro:page-load", () => {
+    const figure = document.getElementById("post-graph");
+    if (!figure || figure.dataset.rendered === "true") return;
+    figure.dataset.rendered = "true";
+    renderGraph(figure);
+  });
+</script>
