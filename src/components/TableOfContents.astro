@@ -1,0 +1,36 @@
+---
+import type { MarkdownHeading } from "astro";
+import SidePanel from "./SidePanel.astro";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+type Props = {
+  headings: MarkdownHeading[];
+};
+
+const { headings } = Astro.props;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const items = headings.filter(({ depth }) => depth === 2 || depth === 3);
+---
+
+{
+  items.length > 1 && (
+    <SidePanel label={t.post.tableOfContents} side="start">
+      <ol class="border-border space-y-1.5 border-s ps-3 text-[12px] leading-snug">
+        {items.map(({ slug, text, depth }) => (
+          <li class:list={{ "ps-3": depth === 3 }}>
+            <a
+              href={`#${slug}`}
+              class="text-muted-foreground hover:text-hn block hover:underline"
+            >
+              {text}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </SidePanel>
+  )
+}

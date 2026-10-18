@@ -2,7 +2,7 @@
 
 @layer base {
   .app-prose {
-    @apply prose text-foreground max-w-none font-serif text-[19px] leading-[1.8];
+    @apply prose text-foreground max-w-none font-sans text-[17px] leading-[1.7];
 
     > p:first-of-type::first-letter {
       @apply text-hn float-left mt-[6px] mr-3 text-[64px] leading-[0.72] font-bold sm:text-[84px];
@@ -17,19 +17,19 @@
     h3,
     h4,
     th {
-      @apply text-foreground font-serif font-bold tracking-tight;
+      @apply text-foreground font-sans font-bold tracking-tight;
     }
 
     h2 {
-      @apply mt-12 mb-5 text-[28px] leading-tight;
+      @apply mt-12 mb-5 text-[26px] leading-tight;
     }
 
     h3 {
-      @apply mt-10 mb-4 text-[23px] leading-tight;
+      @apply mt-10 mb-4 text-[21px] leading-tight;
     }
 
     h4 {
-      @apply mt-8 mb-3 text-[19px];
+      @apply mt-8 mb-3 text-[18px];
     }
 
     p,
@@ -40,8 +40,16 @@
       @apply text-foreground;
     }
 
+    /* Referência inline suave: todo link do corpo do texto é fonte, então o
+       sublinhado é pontilhado e de baixa opacidade — percebe-se que é link,
+       mas o olho não tropeça num parágrafo com dezenas de referências.
+       A pista nunca é só cor (WCAG 1.4.1): o sublinhado existe sempre e, no
+       hover, fica sólido e laranja. O foco pelo teclado continua no contorno
+       tracejado global (src/styles/global.css).
+       50% da cor do texto é o ponto em que o traço ainda passa de 3:1 contra o
+       fundo nos dois temas sem chamar atenção. */
     a {
-      @apply text-foreground hover:text-hn wrap-break-word underline decoration-1 underline-offset-4 focus-visible:no-underline;
+      @apply text-foreground decoration-foreground/50 hover:text-hn hover:decoration-hn focus-visible:text-hn wrap-break-word underline decoration-dotted decoration-1 underline-offset-4 transition-colors hover:decoration-solid focus-visible:no-underline;
     }
 
     ul {
@@ -73,16 +81,21 @@
     }
 
     table {
-      @apply block max-w-full overflow-x-auto font-sans text-[15px];
+      @apply my-8 block max-w-full overflow-x-auto font-sans text-[14px] leading-[1.35];
       width: max-content;
+      min-width: 100%;
 
       th,
       td {
-        @apply border-border border p-2;
+        @apply border-border border px-3 py-1.5 align-top;
       }
 
       th {
-        @apply py-1.5;
+        @apply bg-muted text-foreground py-1 text-left font-bold;
+      }
+
+      tbody tr:nth-child(even) {
+        @apply bg-muted/40;
       }
 
       th[align="center"],
@@ -110,7 +123,15 @@
     }
 
     blockquote {
-      @apply border-hn text-muted-foreground my-10 border-s-4 ps-6 text-[24px] leading-[1.55] font-normal wrap-break-word italic;
+      @apply border-hn bg-muted/40 text-foreground my-9 border-s-4 py-3 ps-5 pe-4 font-serif text-[18px] leading-[1.5] font-normal wrap-break-word italic;
+
+      p {
+        @apply my-0;
+      }
+
+      p + p {
+        @apply mt-3;
+      }
 
       p:first-of-type::before,
       p:last-of-type::after {

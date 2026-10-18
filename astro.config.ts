@@ -43,7 +43,7 @@ export default defineConfig({
   markdown: {
     processor: unified({
       remarkPlugins: [
-        remarkMath,
+        [remarkMath, { singleDollarTextMath: false }],
         remarkReadingTime,
         remarkToc,
         [remarkCollapse, { test: "Table of contents" }],

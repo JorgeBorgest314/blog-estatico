@@ -1,0 +1,434 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+type Timeline = NonNullable<CollectionEntry<"posts">["data"]["timeline"]>;
+
+type Props = {
+  timeline: Timeline;
+};
+
+const { timeline } = Astro.props;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+// Datas do frontmatter chegam à meia-noite UTC; formatar no fuso local
+// adiantaria um dia (foi o que aconteceu no painel de versões).
+const formatDay = (date: Date) =>
+  new Intl.DateTimeFormat(locale, {
+    timeZone: "UTC",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+
+const events = [...timeline.events].sort(
+  (a, b) => a.date.getTime() - b.date.getTime()
+);
+
+const data = events.map(event => ({
+  date: event.date.toISOString().slice(0, 10),
+  label: formatDay(event.date),
+  title: event.title,
+  url: event.url ?? null,
+  highlight: event.highlight === true,
+}));
+---
+
+<figure
+  id="post-timeline"
+  class="border-border my-10 border font-sans"
+  hidden
+  data-timeline-figure
+  data-label-hint={t.timeline.hint}
+>
+  {
+    timeline.title && (
+      <figcaption class="border-border text-muted-foreground border-b px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase">
+        {timeline.title}
+      </figcaption>
+    )
+  }
+
+  <div class="timeline-chart" hidden></div>
+
+  <ol class="timeline-list px-4 py-3">
+    {
+      data.map(event => (
+        <li class="border-border flex gap-x-3 border-b py-1.5 last:border-b-0">
+          <time
+            datetime={event.date}
+            class="text-muted-foreground shrink-0 text-[12px] tabular-nums"
+          >
+            {event.label}
+          </time>
+          <span class="text-foreground text-[13px] leading-snug">
+            {event.url ? <a href={event.url}>{event.title}</a> : event.title}
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+
+  {
+    timeline.caption && (
+      <p class="border-border text-muted-foreground border-t px-4 py-2 text-[11px] leading-snug">
+        {timeline.caption}
+      </p>
+    )
+  }
+
+  <script
+    type="application/json"
+    data-timeline-data
+    set:html={JSON.stringify(data)}
+  />
+</figure>
+
+<noscript>
+  <style>
+    /* Sem JS a linha do tempo não é movida para o meio do texto, mas a lista
+       em ordem cronológica continua valendo — então ela aparece onde está. */
+    #post-timeline[hidden] {
+      display: block;
+    }
+  </style>
+</noscript>
+
+<style is:global>
+  /* Mesmo link suave do corpo do texto (ver src/styles/typography.css) */
+  #post-timeline .timeline-list a {
+    color: var(--foreground);
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(
+      in srgb,
+      var(--foreground) 50%,
+      transparent
+    );
+    text-underline-offset: 4px;
+  }
+
+  #post-timeline .timeline-list a:hover {
+    color: var(--color-hn);
+    text-decoration-style: solid;
+    text-decoration-color: var(--color-hn);
+  }
+
+  #post-timeline .timeline-axis line,
+  #post-timeline .timeline-axis path {
+    stroke: var(--border);
+  }
+
+  #post-timeline .timeline-axis text {
+    fill: var(--muted-foreground);
+    font-size: 11px;
+  }
+
+  #post-timeline .timeline-spine {
+    stroke: var(--border);
+    stroke-width: 1;
+  }
+
+  #post-timeline .timeline-stem {
+    stroke: var(--border);
+    stroke-width: 1;
+  }
+
+  #post-timeline .timeline-dot {
+    fill: var(--muted-foreground);
+    stroke: var(--background);
+    stroke-width: 1.5;
+    transition: fill 0.15s ease-out;
+  }
+
+  #post-timeline .timeline-event.is-highlight .timeline-dot {
+    fill: var(--color-hn);
+  }
+
+  #post-timeline .timeline-event:hover .timeline-dot,
+  #post-timeline .timeline-event a:focus-visible .timeline-dot {
+    fill: var(--color-hn);
+  }
+
+  #post-timeline .timeline-event a:focus-visible {
+    outline: none;
+  }
+
+  #post-timeline .timeline-event a:focus-visible .timeline-dot {
+    stroke: var(--color-hn);
+    stroke-width: 3;
+  }
+
+  #post-timeline .timeline-badge {
+    fill: var(--background);
+    font-size: 10px;
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  #post-timeline .timeline-badge-bg {
+    fill: var(--color-hn);
+  }
+
+  #post-timeline .timeline-readout {
+    border-top: 1px solid var(--border);
+    color: var(--muted-foreground);
+    min-height: 2.5rem;
+    margin: 0;
+    padding: 0.5rem 1rem;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  #post-timeline .timeline-readout strong {
+    color: var(--foreground);
+    font-weight: 700;
+  }
+</style>
+
+<script>
+  import { select } from "d3-selection";
+  import { scaleTime } from "d3-scale";
+  import { axisBottom } from "d3-axis";
+
+  type TimelineEvent = {
+    date: string;
+    label: string;
+    title: string;
+    url: string | null;
+    highlight: boolean;
+  };
+
+  type Placed = TimelineEvent & { x: number; row: number; mark: number | null };
+
+  /** Abaixo disso o gráfico não cabe e a lista em texto lê melhor. */
+  const MIN_WIDTH = 560;
+  const MARGIN = { top: 46, right: 20, bottom: 26, left: 20 };
+  const MIN_GAP = 11; // px entre dois pontos antes de empurrar para outra linha
+  const ROW_HEIGHT = 13;
+
+  function renderTimeline(figure: HTMLElement) {
+    const raw = figure.querySelector<HTMLScriptElement>(
+      "[data-timeline-data]"
+    )?.textContent;
+    const container = figure.querySelector<HTMLElement>(".timeline-chart");
+    const list = figure.querySelector<HTMLElement>(".timeline-list");
+    if (!raw || !container || !list) return;
+
+    const events = JSON.parse(raw) as TimelineEvent[];
+    const hint = figure.dataset.labelHint ?? "";
+
+    const readout = document.createElement("p");
+    readout.className = "timeline-readout";
+    readout.setAttribute("aria-hidden", "true");
+
+    const draw = () => {
+      const width = figure.clientWidth;
+
+      // Estreito demais: fica só a lista, que é legível em qualquer largura
+      if (width < MIN_WIDTH) {
+        container.hidden = true;
+        container.replaceChildren();
+        readout.remove();
+        list.hidden = false;
+        return;
+      }
+
+      container.hidden = false;
+      list.hidden = true;
+      container.replaceChildren();
+
+      const plotWidth = width - MARGIN.left - MARGIN.right;
+      const x = scaleTime()
+        .domain([
+          new Date(events[0]!.date),
+          new Date(events[events.length - 1]!.date),
+        ])
+        .range([0, plotWidth]);
+
+      // Empurra para baixo o ponto que cairia em cima do anterior: é assim
+      // que a rajada de posts de fevereiro/maio de 2023 fica visível.
+      const lastInRow: number[] = [];
+      let mark = 0;
+      const placed: Placed[] = events.map(event => {
+        const px = x(new Date(event.date));
+        let row = 0;
+        while (lastInRow[row] !== undefined && px - lastInRow[row]! < MIN_GAP) {
+          row += 1;
+        }
+        lastInRow[row] = px;
+        return {
+          ...event,
+          x: px,
+          row,
+          mark: event.highlight ? (mark += 1) : null,
+        };
+      });
+
+      const rows = Math.max(...placed.map(p => p.row)) + 1;
+      const baseline = MARGIN.top;
+      // Altura acompanha quantas linhas o empilhamento precisou: sem isso
+      // sobra um vazio enorme entre o último ponto e o eixo.
+      const height = baseline + (rows - 1) * ROW_HEIGHT + 22 + MARGIN.bottom;
+
+      const svg = select(container)
+        .append("svg")
+        .attr("width", "100%")
+        .attr("height", height)
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .attr("role", "presentation");
+
+      const plot = svg
+        .append("g")
+        .attr("transform", `translate(${MARGIN.left},0)`);
+
+      plot
+        .append("line")
+        .attr("class", "timeline-spine")
+        .attr("x1", 0)
+        .attr("x2", plotWidth)
+        .attr("y1", baseline)
+        .attr("y2", baseline);
+
+      // "out/22" em vez de "out de 2022": com o texto longo os rótulos se
+      // atropelam na largura da coluna de leitura.
+      const tickLabel = (date: Date) => {
+        const month = new Intl.DateTimeFormat("pt-BR", {
+          timeZone: "UTC",
+          month: "short",
+        })
+          .format(date)
+          .replace(".", "");
+        const year = new Intl.DateTimeFormat("pt-BR", {
+          timeZone: "UTC",
+          year: "2-digit",
+        }).format(date);
+        return `${month}/${year}`;
+      };
+
+      const axis = axisBottom<Date>(x)
+        .ticks(Math.max(2, Math.min(5, Math.round(plotWidth / 130))))
+        .tickSizeOuter(0)
+        .tickFormat(date => tickLabel(date as Date));
+
+      plot
+        .append("g")
+        .attr("class", "timeline-axis")
+        .attr("transform", `translate(0,${height - MARGIN.bottom})`)
+        .call(axis);
+
+      const event = plot
+        .selectAll("g.timeline-event")
+        .data(placed)
+        .join("g")
+        .attr("class", d =>
+          d.highlight ? "timeline-event is-highlight" : "timeline-event"
+        );
+
+      // Haste ligando o ponto deslocado de volta à linha do tempo
+      event
+        .filter(d => d.row > 0)
+        .append("line")
+        .attr("class", "timeline-stem")
+        .attr("x1", d => d.x)
+        .attr("x2", d => d.x)
+        .attr("y1", baseline)
+        .attr("y2", d => baseline + d.row * ROW_HEIGHT);
+
+      const anchor = event
+        .append(() =>
+          document.createElementNS("http://www.w3.org/2000/svg", "a")
+        )
+        .attr("href", d => d.url)
+        .attr("aria-label", d => `${d.label} — ${d.title}`);
+
+      anchor
+        .append("circle")
+        .attr("class", "timeline-dot")
+        .attr("cx", d => d.x)
+        .attr("cy", d => baseline + d.row * ROW_HEIGHT)
+        .attr("r", d => (d.highlight ? 6 : 4));
+
+      anchor.append("title").text(d => `${d.label} — ${d.title}`);
+
+      // Marcos numerados, como na palestra: o rótulo inteiro não cabe
+      const marks = event.filter(d => d.mark !== null);
+
+      marks
+        .append("line")
+        .attr("class", "timeline-stem")
+        .attr("x1", d => d.x)
+        .attr("x2", d => d.x)
+        .attr("y1", baseline - 8)
+        .attr("y2", MARGIN.top - 26);
+
+      marks
+        .append("circle")
+        .attr("class", "timeline-badge-bg")
+        .attr("cx", d => d.x)
+        .attr("cy", MARGIN.top - 32)
+        .attr("r", 9);
+
+      marks
+        .append("text")
+        .attr("class", "timeline-badge")
+        .attr("x", d => d.x)
+        .attr("y", MARGIN.top - 28)
+        .text(d => String(d.mark));
+
+      const show = (d: Placed | null) => {
+        if (!d) {
+          readout.textContent = hint;
+          return;
+        }
+        readout.innerHTML = "";
+        const strong = document.createElement("strong");
+        strong.textContent = d.label;
+        readout.append(strong, ` — ${d.title}`);
+      };
+
+      event
+        .on("mouseenter", (_e, d) => show(d))
+        .on("mouseleave", () => show(null));
+      anchor.on("focus", (_e, d) => show(d)).on("blur", () => show(null));
+
+      show(null);
+      figure.append(readout);
+    };
+
+    draw();
+
+    let lastWidth = figure.clientWidth;
+    const observer = new ResizeObserver(() => {
+      if (figure.clientWidth === lastWidth) return;
+      lastWidth = figure.clientWidth;
+      draw();
+    });
+    observer.observe(figure);
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => observer.disconnect(),
+      { once: true }
+    );
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    const figure = document.getElementById("post-timeline");
+    if (!figure) return;
+
+    // O autor marca a posição no Markdown com <div data-timeline></div>;
+    // sem a marcação, a linha do tempo fica onde a página a renderizou.
+    const slot = document.querySelector("#article [data-timeline]");
+    if (slot && !slot.contains(figure)) slot.replaceChildren(figure);
+    figure.hidden = false;
+
+    if (figure.dataset.rendered === "true") return;
+    figure.dataset.rendered = "true";
+    renderTimeline(figure);
+  });
+</script>

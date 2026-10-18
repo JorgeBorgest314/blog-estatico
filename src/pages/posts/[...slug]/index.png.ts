@@ -8,7 +8,9 @@ import config from "@/config";
 export async function getStaticPaths() {
   if (!config.features.dynamicOgImage) return [];
   const posts = await getCollection("posts").then(entries =>
-    entries.filter(({ data }) => !data.draft && !data.ogImage)
+    entries.filter(
+      ({ data }) => (import.meta.env.DEV || !data.draft) && !data.ogImage
+    )
   );
   return posts.map(post => ({
     params: { slug: getPostSlug(post.id, post.filePath) },

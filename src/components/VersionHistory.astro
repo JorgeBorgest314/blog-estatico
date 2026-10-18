@@ -1,0 +1,59 @@
+---
+import SidePanel from "./SidePanel.astro";
+import { useTranslations, tplStr } from "@/i18n";
+import config from "@/config";
+
+export type Version = {
+  version: number;
+  date: Date;
+  note?: string;
+};
+
+type Props = {
+  versions: Version[];
+};
+
+const { versions } = Astro.props;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const sorted = [...versions].sort((a, b) => b.version - a.version);
+
+/** Version dates are plain days: format them in UTC so the site timezone
+ * does not shift `2026-10-18` to the previous day. */
+const formatDay = (date: Date) =>
+  new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "UTC",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+
+const isoDay = (date: Date) => date.toISOString().slice(0, 10);
+---
+
+{
+  sorted.length > 0 && (
+    <SidePanel label={t.post.versions} side="end">
+      <ol class="border-border space-y-3 border-s ps-3 text-[12px] leading-snug">
+        {sorted.map(({ version, date, note }, index) => (
+          <li>
+            <p
+              class:list={[
+                "flex items-baseline gap-x-2",
+                index === 0
+                  ? "text-foreground font-bold"
+                  : "text-muted-foreground",
+              ]}
+            >
+              <span>{tplStr(t.post.versionLabel, { n: version })}</span>
+              <time datetime={isoDay(date)}>{formatDay(date)}</time>
+            </p>
+            {note && <p class="text-muted-foreground mt-0.5">{note}</p>}
+          </li>
+        ))}
+      </ol>
+    </SidePanel>
+  )
+}

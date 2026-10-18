@@ -10,9 +10,15 @@ export default {
     search: "Search",
     categories: "Categories",
     series: "Series",
+    graph: "Graph",
   },
   post: {
     by: "By",
+    video: "The talk",
+    tableOfContents: "Contents",
+    versions: "Versions",
+    versionLabel: "v{{n}}",
+    watchOnYouTube: "Watch on YouTube",
     readingTime: "{{minutes}} min read",
     publishedAt: "Published at",
     updatedAt: "Updated",
@@ -39,6 +45,21 @@ export default {
     more: "More",
     empty: "No posts yet.",
   },
+  timeline: {
+    hint: "Hover or use the keyboard to read each post",
+  },
+  graph: {
+    empty: "No posts yet — the graph shows up with the first text.",
+    hint: "Drag the nodes · scroll to zoom · double-click to reset",
+    reset: "Reset",
+    ariaLabel: "Graph of posts, categories and tags",
+    fallback:
+      "Interactive graph linking every post to its category and tags. The same connections are available as text on the tags and categories pages.",
+    legendTags: "Tags",
+    nodePost: "Post",
+    nodeTag: "Tag",
+    nodeCategory: "Category",
+  },
   footer: {
     copyright: "Copyright",
     allRightsReserved: "All rights reserved.",
@@ -64,8 +85,12 @@ export default {
 
     seriesTitle: "Series",
     seriesDesc: "Posts meant to be read in order.",
+
     seriesPostCount: "{{count}} posts",
     seriesPostCountOne: "1 post",
+
+    graphTitle: "Graph",
+    graphDesc: "How the posts connect through tags and categories.",
   },
   a11y: {
     skipToContent: "Skip to content",

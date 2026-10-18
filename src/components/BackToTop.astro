@@ -1,0 +1,37 @@
+---
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+---
+
+<a
+  id="back-to-top"
+  href="#main-content"
+  data-pagefind-ignore
+  class="border-border bg-background text-muted-foreground hover:text-hn hover:border-hn invisible fixed end-4 bottom-4 z-40 flex size-10 items-center justify-center border font-sans text-lg opacity-0 transition-opacity motion-reduce:transition-none"
+  aria-label={t.post.backToTop}
+  title={t.post.backToTop}
+>
+  <span aria-hidden="true">&uarr;</span>
+</a>
+
+<script>
+  function setupBackToTop() {
+    const button = document.getElementById("back-to-top");
+    if (!button) return;
+
+    const toggle = () => {
+      const visible = window.scrollY > 600;
+      button.classList.toggle("invisible", !visible);
+      button.classList.toggle("opacity-0", !visible);
+    };
+
+    toggle();
+    document.addEventListener("scroll", toggle, { passive: true });
+  }
+
+  setupBackToTop();
+  document.addEventListener("astro:after-swap", setupBackToTop);
+</script>

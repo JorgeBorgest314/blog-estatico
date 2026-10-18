@@ -13,8 +13,15 @@ type Props = {
 
 const { variant: Heading = "h2", id, data, filePath } = Astro.props;
 
-const { title, description, category, pubDatetime, modDatetime, timezone } =
-  data;
+const {
+  title,
+  subtitle,
+  description,
+  category,
+  pubDatetime,
+  modDatetime,
+  timezone,
+} = data;
 const categoryInfo = CATEGORIES[category];
 const locale = Astro.currentLocale ?? config.site.lang;
 ---
@@ -32,7 +39,14 @@ const locale = Astro.currentLocale ?? config.site.lang;
       {title}
     </Heading>
   </a>
-  <p class="mt-0.5 font-serif text-[15px] leading-snug">{description}</p>
+  {
+    subtitle && (
+      <p class="mt-0.5 font-serif text-[15px] leading-snug">{subtitle}</p>
+    )
+  }
+  <p class="text-muted-foreground mt-0.5 font-serif text-[13px] leading-snug">
+    {description}
+  </p>
   <p
     class="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 font-sans text-[12px]"
   >
