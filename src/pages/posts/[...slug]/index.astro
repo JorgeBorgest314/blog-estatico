@@ -86,6 +86,8 @@ const {
   video,
   versions,
   timeline,
+  wip,
+  wipNote,
 } = post.data;
 
 const categoryInfo = CATEGORIES[category];
@@ -181,6 +183,15 @@ const ogImage = ogImageUrl
         }
       </p>
     </header>
+
+    {
+      wip && (
+        <aside class="border-hn bg-hn/10 text-foreground mb-8 flex gap-x-2 border-s-4 px-4 py-3 font-sans text-[13px] leading-snug">
+          <span aria-hidden="true">⚠️</span>
+          <span>{wipNote ?? t.post.wip}</span>
+        </aside>
+      )
+    }
 
     <TableOfContents {headings} />
 

@@ -77,6 +77,7 @@ video:
   youtube: "https://youtu.be/AREZ8MfABpY?t=11155"
   title: "A palestra no 71º encontro do Guru-SP (set/2025)"
 draft: false
+wip: true
 featured: true
 ---
 

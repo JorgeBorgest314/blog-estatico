@@ -27,6 +27,8 @@ export default {
     sharePostViaEmail: "Share this post via email",
     tagLabel: "Tags",
     backToTop: "Back to top",
+    wip: "Work in progress: this text is still being revised and will change.",
+    wipShort: "Work in progress",
     goBack: "Go back",
     editPage: "Edit page",
     previousPost: "Previous Post",

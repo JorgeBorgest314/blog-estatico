@@ -42,6 +42,10 @@ const posts = defineCollection({
           title: z.string().optional(),
         })
         .optional(),
+      /** texto publicado mas ainda em revisão: mostra o aviso de construção */
+      wip: z.boolean().optional(),
+      /** substitui o texto padrão do aviso de construção */
+      wipNote: z.string().optional(),
       // Linha do tempo desenhada no ponto onde o post tiver <div data-timeline>
       timeline: z
         .object({
