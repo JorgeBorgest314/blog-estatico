@@ -60,6 +60,13 @@
       @apply marker:text-hn;
     }
 
+    /* Destaque de marca-texto: fundo vermelho suave, com contraste próprio
+       no tema escuro (o amarelo padrão do navegador some no fundo escuro). */
+    mark {
+      @apply rounded-sm bg-red-100 px-1 py-0.5 text-red-900;
+      @apply dark:bg-red-950 dark:text-red-200;
+    }
+
     hr {
       @apply border-border;
     }
