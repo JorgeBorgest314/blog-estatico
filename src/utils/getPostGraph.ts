@@ -31,7 +31,7 @@ export type PostGraph = {
 };
 
 /**
- * Builds the post/category/tag graph rendered on `/grafo/`.
+ * Builds the post/category/tag graph rendered on `/graph/`.
  *
  * Posts link to their category and to each of their tags, so tags shared by
  * two posts pull them together — the same structure Obsidian's graph view
@@ -74,7 +74,7 @@ export function getPostGraph(
       id: `category:${category}`,
       kind: "category",
       label: CATEGORIES[category].name,
-      url: getRelativeLocaleUrl(locale, `categorias/${category}/`),
+      url: getRelativeLocaleUrl(locale, `categories/${category}/`),
       category,
     });
     addLink(postId, categoryId);

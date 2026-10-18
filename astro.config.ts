@@ -29,10 +29,20 @@ export default defineConfig({
     sitemap({
       filter: page =>
         (config.features?.showArchives !== false ||
-          !page.endsWith("/arquivo/")) &&
+          !page.endsWith("/archive/")) &&
         (config.features?.search === "pagefind" || !page.endsWith("/search/")),
     }),
   ],
+  // A página foi publicada em /sobre/ antes de virar /about/: o endereço
+  // antigo continua respondendo e manda o leitor para o novo.
+  redirects: {
+    "/sobre": "/about",
+    "/arquivo": "/archive",
+    "/grafo": "/graph",
+    "/categorias": "/categories",
+    "/categorias/computacao": "/categories/computacao",
+    "/categorias/matematica": "/categories/matematica",
+  },
   i18n: {
     locales: ["pt-BR"],
     defaultLocale: "pt-BR",
