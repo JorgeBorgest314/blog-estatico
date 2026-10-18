@@ -74,6 +74,16 @@ const pages = defineCollection({
     description: z.string().optional(),
     ogImage: z.string().optional(),
     canonicalURL: z.string().optional(),
+    // Mesmo histórico de versões dos posts (ver a coleção `posts`)
+    versions: z
+      .array(
+        z.object({
+          version: z.number().int().positive(),
+          date: z.date(),
+          note: z.string().optional(),
+        })
+      )
+      .optional(),
   }),
 });
 
