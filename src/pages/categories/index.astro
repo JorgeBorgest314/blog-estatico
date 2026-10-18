@@ -33,7 +33,7 @@ const categories = CATEGORY_LIST.map(category => ({
           ({ slug, name, description, textClass, hoverClass, count }) => (
             <li class="border-border border-b py-5 last:border-b-0">
               <a
-                href={getRelativeLocaleUrl(locale, `categorias/${slug}/`)}
+                href={getRelativeLocaleUrl(locale, `categories/${slug}/`)}
                 class:list={[
                   "inline-block font-serif text-[22px] leading-tight font-bold",
                   textClass,

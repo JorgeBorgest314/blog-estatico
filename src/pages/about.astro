@@ -8,11 +8,11 @@ import Footer from "@/components/Footer.astro";
 import VersionHistory from "@/components/VersionHistory.astro";
 import config from "@/config";
 
-const about = await getEntry("pages", "sobre");
+const about = await getEntry("pages", "about");
 
 if (!about) {
   throw new Error(
-    "Missing content entry: `sobre.md` or `sobre.mdx` in `src/content/pages/`"
+    "Missing content entry: `about.md` or `about.mdx` in `src/content/pages/`"
   );
 }
 

@@ -21,9 +21,9 @@ const isActive = (path: string) =>
 const navLinks = [
   ...CATEGORY_LIST.map(({ slug, name }) => ({
     label: name,
-    path: `categorias/${slug}`,
+    path: `categories/${slug}`,
   })),
-  { label: t.nav.about, path: "sobre" },
+  { label: t.nav.about, path: "about" },
 ];
 ---
 

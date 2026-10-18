@@ -5,7 +5,7 @@ export default {
     home: "Início",
     posts: "Posts",
     tags: "Tags",
-    about: "Sobre",
+    about: "Sobre mim",
     archives: "Arquivo",
     search: "Busca",
     categories: "Categorias",

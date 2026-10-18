@@ -1,5 +1,5 @@
 ---
-title: "Sobre"
+title: "Sobre mim"
 description: "Jorge Luís Borges: engenheiro de software na iugu, estudante de Matemática Aplicada e Computacional no IME/USP, e o caminho torto até aqui."
 versions:
   - version: 1
