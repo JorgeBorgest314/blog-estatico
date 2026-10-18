@@ -29,7 +29,7 @@ export default defineAstroPaperConfig({
     { name: "github", url: "https://github.com/JorgeLAB", linkTitle: "GitHub" },
     {
       name: "linkedin",
-      url: "https://www.linkedin.com/in/SEU-USUARIO/",
+      url: "https://www.linkedin.com/in/jorge-borges-90965121a/",
       linkTitle: "LinkedIn",
     },
   ],
