@@ -1,13 +1,13 @@
 ---
 title: "Sobre mim"
-description: "Jorge Luís Borges: engenheiro de software na iugu, estudante de Matemática Aplicada e Computacional no IME/USP, e o caminho torto até aqui."
+description: "Jorge Luís Borges: engenheiro de software sênior na iugu, estudante de Matemática Aplicada e Computacional no IME/USP, e o caminho torto até aqui."
 versions:
   - version: 1
     date: 2026-10-18
     note: "Primeira versão"
 ---
 
-Meu nome é Jorge Luís Borges, cresci em [São Gonçalo](<https://pt.wikipedia.org/wiki/S%C3%A3o_Gon%C3%A7alo_(Rio_de_Janeiro)>), no Rio de Janeiro, e trabalho como engenheiro de software na [iugu](https://www.iugu.com/), em [São Paulo](https://pt.wikipedia.org/wiki/S%C3%A3o_Paulo), com Ruby on Rails e serviços de dados da AWS.
+Meu nome é Jorge Luís Borges, cresci em [São Gonçalo](<https://pt.wikipedia.org/wiki/S%C3%A3o_Gon%C3%A7alo_(Rio_de_Janeiro)>), no Rio de Janeiro, e trabalho como engenheiro de software sênior na [iugu](https://www.iugu.com/), em [São Paulo](https://pt.wikipedia.org/wiki/S%C3%A3o_Paulo), com Ruby on Rails e serviços de dados da AWS.
 
 Desde 2023 curso [Matemática Aplicada e Computacional](https://www.ime.usp.br/bmac/) no IME/USP. Entrar foi um desafio. Manter, conciliando com as demandas de trabalho e as provas, é outro. Aprendi ali a dar valor a tempo e organização, e a me aprofundar em matemáticas, no plural. Os últimos anos têm sido intensos.
 

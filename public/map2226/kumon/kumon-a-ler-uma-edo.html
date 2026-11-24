@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>MAP2226 · Nível A · Ler uma EDO</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #888; }
+  body { font-family: "DejaVu Serif", "Liberation Serif", Georgia, serif; font-size: 10.5pt; color: #000; }
+
+  .sheet { width: 297mm; height: 209.5mm; background: #fff; display: flex; margin: 8mm auto; overflow: hidden; page-break-after: always; break-after: page; }
+  .sheet:last-child { page-break-after: auto; break-after: auto; }
+  .half { width: 148.5mm; height: 100%; padding: 9mm 10mm 8mm 10mm; display: flex; flex-direction: column; overflow: hidden; }
+  .half + .half { border-left: 1px dashed #777; }
+
+  .top { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #000; padding-bottom: 1.5mm; }
+  .top .code { font-family: "DejaVu Sans", Arial, sans-serif; font-weight: bold; font-size: 15pt; }
+  .top .course { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 8pt; }
+  .meta { display: flex; gap: 4mm; font-family: "DejaVu Sans", Arial, sans-serif; font-size: 8pt; margin: 2mm 0 2.5mm; }
+  .meta span { flex: 1; border-bottom: 1px solid #000; padding-bottom: .5mm; white-space: nowrap; }
+  h2 { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 11.5pt; margin: 0 0 2mm; }
+  .task { margin: 0 0 2mm; font-size: 9.5pt; }
+
+  .ex, .dica { border: 1px solid #000; border-radius: 2mm; padding: 1.8mm 2.5mm; margin-bottom: 2mm; font-size: 9.3pt; line-height: 1.35; }
+  .ex { background: #f1f1f1; }
+  .dica { border-style: dashed; }
+  .ex b.tag, .dica b.tag { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 8pt; letter-spacing: .5px; text-transform: uppercase; }
+
+  ol.q { list-style: none; margin: 1mm 0 0; padding: 0; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  ol.q li { display: flex; align-items: flex-end; gap: 2mm; min-height: 9mm; }
+  ol.q li .n { font-family: "DejaVu Sans", Arial, sans-serif; font-weight: bold; font-size: 9pt; width: 6mm; flex: none; }
+  ol.q li .eq { flex: none; min-width: 43mm; }
+  ol.q li .ans { flex: 1; display: flex; gap: 2mm; align-items: flex-end; font-size: 9pt; white-space: nowrap; }
+  .bl { display: inline-block; border-bottom: 1px solid #000; min-width: 14mm; flex: 1; height: 5mm; }
+  .bl.s { flex: none; min-width: 11mm; }
+  .opt { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 8.5pt; }
+  .sub { font-family: "DejaVu Sans", Arial, sans-serif; font-weight: bold; font-size: 9pt; margin-top: 1.5mm; border-bottom: 1px solid #999; padding-bottom: .5mm; }
+
+  ol.q li.sub { min-height: 0; display: block; }
+  ol.q.c li { min-height: 7mm; }
+  ol.v li { flex-direction: column; align-items: stretch; gap: 0; min-height: 15mm; }
+  ol.v li .l1, ol.v li .l2 { display: flex; align-items: flex-end; gap: 2mm; font-size: 9.3pt; white-space: nowrap; }
+  ol.v li .l2 { padding-left: 8mm; margin-top: 1mm; }
+
+  i { font-family: "DejaVu Serif", "Liberation Serif", Georgia, serif; }
+  .fr { display: inline-flex; flex-direction: column; text-align: center; vertical-align: middle; font-size: .85em; line-height: 1.1; margin: 0 .5mm; }
+  .fr span:first-child { border-bottom: 1px solid #000; padding: 0 .8mm; }
+  .fr span:last-child { padding: 0 .8mm; }
+  sup { font-size: .72em; line-height: 0; }
+
+  .foot { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 7pt; color: #444; text-align: right; margin-top: 1.5mm; }
+
+  .gab h2 { margin-bottom: 1.5mm; }
+  .gab h3 { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 9.5pt; margin: 2.5mm 0 1mm; border-bottom: 1px solid #000; }
+  .gab .cols { columns: 2; column-gap: 6mm; font-size: 9pt; line-height: 1.5; }
+  .gab .cols.one { columns: 1; }
+  .gab .cols div { break-inside: avoid; }
+  .gab .cols b { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 8.5pt; display: inline-block; width: 6mm; }
+  .gab .note { font-size: 8.7pt; border: 1px dashed #000; border-radius: 2mm; padding: 1.5mm 2.5mm; margin-top: 1.5mm; line-height: 1.35; }
+
+  @media print {
+    html, body { background: #fff; }
+    .sheet { margin: 0; }
+    .ex { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ======================= FOLHA 1 ======================= -->
+<div class="sheet">
+
+  <div class="half">
+    <div class="top"><span class="code">A 1</span><span class="course">MAP2226 · EDO · Nível A: ler uma EDO</span></div>
+    <div class="meta"><span>Nome:</span><span>Data: __/__/__</span><span>Início: __:__ Fim: __:__</span><span>Acertos: __/10</span></div>
+    <h2>Incógnita e ordem</h2>
+    <p class="task">Para cada EDO, escreva a <b>incógnita</b> (a função procurada) e a <b>ordem</b>.</p>
+    <div class="ex"><b class="tag">Exemplo</b><br>
+      <i>N</i>″ + 3<i>N</i>′ = <i>t</i> &nbsp;→&nbsp; incógnita: <b><i>N</i></b> &nbsp;·&nbsp; ordem: <b>2</b> (a maior derivada é <i>N</i>″).</div>
+    <div class="dica"><b class="tag">Dica</b><br>
+      Ordem = <b>maior derivada</b> que aparece (′ = 1, ″ = 2, ‴ = 3). <b>Não</b> é o expoente: (<i>N</i>′)<sup>2</sup> ainda tem ordem 1.</div>
+    <ol class="q">
+      <li><span class="n">1.</span><span class="eq"><i>N</i>′ = 2<i>N</i></span><span class="ans">incógnita: <span class="bl s"></span> ordem: <span class="bl s"></span></span></li>
+      <li><span class="n">2.</span><span class="eq"><i>P</i>′ = −3<i>P</i></span><span class="ans">incógnita: <span class="bl s"></span> ordem: <span class="bl s"></span></span></li>
+      <li><span class="n">3.</span><span class="eq"><i>x</i>′ = <i>x</i> + <i>t</i></span><span class="ans">incógnita: <span class="bl s"></span> ordem: <span class="bl s"></span></span></li>
+      <li><span class="n">4.</span><span class="eq"><i>x</i>″ = −<i>x</i></span><span class="ans">incógnita: <span class="bl s"></span> ordem: <span class="bl s"></span></span></li>
+      <li><span class="n">5.</span><span class="eq"><i>y</i>″ + <i>y</i>′ = 0</span><span class="ans">incógnita: <span class="bl s"></span> ordem: <span class="bl s"></span></span></li>
+      <li><span class="n">6.</span><span class="eq"><i>N</i>′ = <i>N</i><sup>2</sup></span><span class="ans">incógnita: <span class="bl s"></span> ordem: <span class="bl s"></span></span></li>
+      <li><span class="n">7.</span><span class="eq">(<i>N</i>′)<sup>2</sup> = <i>N</i></span><span class="ans">incógnita: <span class="bl s"></span> ordem: <span class="bl s"></span></span></li>
+      <li><span class="n">8.</span><span class="eq"><i>x</i>‴ = <i>t</i></span><span class="ans">incógnita: <span class="bl s"></span> ordem: <span class="bl s"></span></span></li>
+      <li><span class="n">9.</span><span class="eq"><i>y</i>″ = (<i>y</i>′)<sup>3</sup></span><span class="ans">incógnita: <span class="bl s"></span> ordem: <span class="bl s"></span></span></li>
+      <li><span class="n">10.</span><span class="eq"><i>N</i>′ = <i>rN</i>(1 − <span class="fr"><span><i>N</i></span><span><i>K</i></span></span>)</span><span class="ans">incógnita: <span class="bl s"></span> ordem: <span class="bl s"></span></span></li>
+    </ol>
+    <div class="foot">A1 · gabarito na folha G1</div>
+  </div>
+
+  <div class="half">
+    <div class="top"><span class="code">A 2</span><span class="course">MAP2226 · EDO · Nível A: ler uma EDO</span></div>
+    <div class="meta"><span>Nome:</span><span>Data: __/__/__</span><span>Início: __:__ Fim: __:__</span><span>Acertos: __/12</span></div>
+    <h2>O tempo <i>t</i> aparece no lado direito?</h2>
+    <p class="task">Olhe <b>só o lado direito</b> da equação. A letra <i>t</i> está escrita lá? Circule SIM ou NÃO.</p>
+    <div class="ex"><b class="tag">Exemplo</b><br>
+      <i>N</i>′ = 2<i>N</i> − <i>t</i> &nbsp;→&nbsp; lado direito: 2<i>N</i> − <i>t</i> &nbsp;→&nbsp; <i>t</i> aparece: <b>SIM</b>.<br>
+      <i>N</i>′ = 2<i>N</i> − 7 &nbsp;→&nbsp; lado direito: 2<i>N</i> − 7 &nbsp;→&nbsp; <i>t</i> aparece: <b>NÃO</b>.</div>
+    <div class="dica"><b class="tag">Dica</b><br>
+      <i>r</i>, <i>K</i>, <i>h</i> são <b>constantes</b> (números fixos): não são o tempo. <i>N</i> muda com o tempo, mas <i>N</i> <b>não é</b> <i>t</i>. Procure a letra <i>t</i> escrita.</div>
+    <ol class="q">
+      <li><span class="n">1.</span><span class="eq"><i>N</i>′ = 3<i>N</i></span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+      <li><span class="n">2.</span><span class="eq"><i>N</i>′ = 3<i>N</i> + <i>t</i></span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+      <li><span class="n">3.</span><span class="eq"><i>N</i>′ = 3<i>N</i> + 5</span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+      <li><span class="n">4.</span><span class="eq"><i>N</i>′ = <i>t</i></span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+      <li><span class="n">5.</span><span class="eq"><i>N</i>′ = <i>rN</i></span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+      <li><span class="n">6.</span><span class="eq"><i>N</i>′ = <i>rN</i> − <i>h</i></span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+      <li><span class="n">7.</span><span class="eq"><i>N</i>′ = <i>rN</i> − <i>t</i><sup>2</sup></span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+      <li><span class="n">8.</span><span class="eq"><i>N</i>′ = <i>N</i> · sen <i>t</i></span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+      <li><span class="n">9.</span><span class="eq"><i>N</i>′ = sen <i>N</i></span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+      <li><span class="n">10.</span><span class="eq"><i>N</i>′ = <i>e</i><sup><i>t</i></sup></span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+      <li><span class="n">11.</span><span class="eq"><i>N</i>′ = <i>e</i><sup><i>N</i></sup></span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+      <li><span class="n">12.</span><span class="eq"><i>N</i>′ = <i>rN</i>(1 − <span class="fr"><span><i>N</i></span><span><i>K</i></span></span>)</span><span class="ans opt">SIM &nbsp;&nbsp; NÃO</span></li>
+    </ol>
+    <div class="foot">A2 · gabarito na folha G1</div>
+  </div>
+</div>
+
+<!-- ======================= FOLHA 2 ======================= -->
+<div class="sheet">
+
+  <div class="half">
+    <div class="top"><span class="code">A 3</span><span class="course">MAP2226 · EDO · Nível A: ler uma EDO</span></div>
+    <div class="meta"><span>Nome:</span><span>Data: __/__/__</span><span>Início: __:__ Fim: __:__</span><span>Acertos: __/12</span></div>
+    <h2>Autônoma (A) ou não autônoma (NA)</h2>
+    <p class="task">Escreva <b>A</b> ou <b>NA</b> e, ao lado, o termo que justifica (ou “não há <i>t</i>”).</p>
+    <div class="ex"><b class="tag">Exemplo</b><br>
+      <i>N</i>′ = <i>rN</i> − <i>h</i>(<i>t</i>) &nbsp;→&nbsp; <b>NA</b>, por causa de <i>h</i>(<i>t</i>).<br>
+      <i>N</i>′ = <i>rN</i> − <i>h</i> &nbsp;→&nbsp; <b>A</b>, não há <i>t</i> no lado direito.</div>
+    <div class="dica"><b class="tag">Dica</b><br>
+      É o mesmo teste da folha A2: <i>t</i> aparece → <b>NA</b>; não aparece → <b>A</b>. Um coeficiente escrito como <i>h</i>(<i>t</i>), <i>K</i>(<i>t</i>) ou <i>r</i>(<i>t</i>) conta como <i>t</i> aparecendo. Ser “complicada” ou não linear <b>não</b> torna a equação não autônoma.</div>
+    <ol class="q">
+      <li><span class="n">1.</span><span class="eq"><i>N</i>′ = 2<i>N</i></span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+      <li><span class="n">2.</span><span class="eq"><i>N</i>′ = 2<i>N</i> + <i>t</i></span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+      <li><span class="n">3.</span><span class="eq"><i>N</i>′ = <i>N</i><sup>2</sup></span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+      <li><span class="n">4.</span><span class="eq"><i>N</i>′ = <i>t</i> · <i>N</i></span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+      <li><span class="n">5.</span><span class="eq"><i>N</i>′ = cos <i>t</i></span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+      <li><span class="n">6.</span><span class="eq"><i>N</i>′ = <i>N</i>(1 − <i>N</i>) − 2</span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+      <li><span class="n">7.</span><span class="eq"><i>N</i>′ = <i>rN</i>(1 − <span class="fr"><span><i>N</i></span><span><i>K</i></span></span>)</span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+      <li><span class="n">8.</span><span class="eq"><i>N</i>′ = <i>rN</i>(1 − <span class="fr"><span><i>N</i></span><span><i>K</i>(<i>t</i>)</span></span>)</span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+      <li><span class="n">9.</span><span class="eq"><i>N</i>′ = <i>r</i>(<i>t</i>) · <i>N</i></span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+      <li><span class="n">10.</span><span class="eq"><i>N</i>′ = <i>rN</i> − <i>h</i></span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+      <li><span class="n">11.</span><span class="eq"><i>N</i>′ = <i>rN</i> − <i>h</i> · sen <i>t</i></span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+      <li><span class="n">12.</span><span class="eq"><i>x</i>′ = <i>ax</i> − <i>bxy</i>, &nbsp;<i>y</i>′ = −<i>cy</i> + <i>dxy</i></span><span class="ans"><span class="bl s"></span> porque <span class="bl"></span></span></li>
+    </ol>
+    <div class="foot">A3 · gabarito na folha G1</div>
+  </div>
+
+  <div class="half">
+    <div class="top"><span class="code">A 4</span><span class="course">MAP2226 · EDO · Nível A: ler uma EDO</span></div>
+    <div class="meta"><span>Nome:</span><span>Data: __/__/__</span><span>Início: __:__ Fim: __:__</span><span>Acertos: __/10</span></div>
+    <h2>Valor <i>N</i> × taxa <i>N</i>′</h2>
+    <p class="task">Dado o valor de <i>N</i>, calcule a taxa <i>N</i>′ e diga se a população <b>cresce</b>, <b>decresce</b> ou está <b>parada</b>.</p>
+    <div class="ex"><b class="tag">Exemplo</b><br>
+      <i>N</i>′ = 0,5<i>N</i>, com <i>N</i> = 10 &nbsp;→&nbsp; <i>N</i>′ = 0,5 · 10 = <b>5</b> &nbsp;→&nbsp; <i>N</i>′ &gt; 0: <b>cresce</b>.</div>
+    <div class="dica"><b class="tag">Dica</b><br>
+      <i>N</i> = quanto há. <i>N</i>′ = velocidade de variação. Substitua <i>N</i> no lado direito.<br>
+      <i>N</i>′ &gt; 0 cresce &nbsp;·&nbsp; <i>N</i>′ &lt; 0 decresce &nbsp;·&nbsp; <i>N</i>′ = 0 parada.</div>
+    <ol class="q c">
+      <li class="sub">EDO: <i>N</i>′ = 2<i>N</i></li>
+      <li><span class="n">1.</span><span class="eq" style="min-width:20mm"><i>N</i> = 3</span><span class="ans"><span style="flex:none"><i>N</i>′ =</span><span class="bl"></span><span style="flex:none">a população</span><span class="bl"></span></span></li>
+      <li><span class="n">2.</span><span class="eq" style="min-width:20mm"><i>N</i> = 10</span><span class="ans"><span style="flex:none"><i>N</i>′ =</span><span class="bl"></span><span style="flex:none">a população</span><span class="bl"></span></span></li>
+      <li class="sub">EDO: <i>N</i>′ = −3<i>N</i></li>
+      <li><span class="n">3.</span><span class="eq" style="min-width:20mm"><i>N</i> = 2</span><span class="ans"><span style="flex:none"><i>N</i>′ =</span><span class="bl"></span><span style="flex:none">a população</span><span class="bl"></span></span></li>
+      <li><span class="n">4.</span><span class="eq" style="min-width:20mm"><i>N</i> = 5</span><span class="ans"><span style="flex:none"><i>N</i>′ =</span><span class="bl"></span><span style="flex:none">a população</span><span class="bl"></span></span></li>
+      <li class="sub">EDO: <i>N</i>′ = 2<i>N</i> − 10</li>
+      <li><span class="n">5.</span><span class="eq" style="min-width:20mm"><i>N</i> = 8</span><span class="ans"><span style="flex:none"><i>N</i>′ =</span><span class="bl"></span><span style="flex:none">a população</span><span class="bl"></span></span></li>
+      <li><span class="n">6.</span><span class="eq" style="min-width:20mm"><i>N</i> = 5</span><span class="ans"><span style="flex:none"><i>N</i>′ =</span><span class="bl"></span><span style="flex:none">a população</span><span class="bl"></span></span></li>
+      <li><span class="n">7.</span><span class="eq" style="min-width:20mm"><i>N</i> = 2</span><span class="ans"><span style="flex:none"><i>N</i>′ =</span><span class="bl"></span><span style="flex:none">a população</span><span class="bl"></span></span></li>
+      <li class="sub">EDO: <i>N</i>′ = <i>N</i>(1 − <span class="fr"><span><i>N</i></span><span>10</span></span>)</li>
+      <li><span class="n">8.</span><span class="eq" style="min-width:20mm"><i>N</i> = 5</span><span class="ans"><span style="flex:none"><i>N</i>′ =</span><span class="bl"></span><span style="flex:none">a população</span><span class="bl"></span></span></li>
+      <li><span class="n">9.</span><span class="eq" style="min-width:20mm"><i>N</i> = 10</span><span class="ans"><span style="flex:none"><i>N</i>′ =</span><span class="bl"></span><span style="flex:none">a população</span><span class="bl"></span></span></li>
+      <li><span class="n">10.</span><span class="eq" style="min-width:20mm"><i>N</i> = 20</span><span class="ans"><span style="flex:none"><i>N</i>′ =</span><span class="bl"></span><span style="flex:none">a população</span><span class="bl"></span></span></li>
+    </ol>
+    <div class="foot">A4 · gabarito na folha G2</div>
+  </div>
+</div>
+
+<!-- ======================= FOLHA 3 ======================= -->
+<div class="sheet">
+
+  <div class="half">
+    <div class="top"><span class="code">A 5</span><span class="course">MAP2226 · EDO · Nível A: ler uma EDO</span></div>
+    <div class="meta"><span>Nome:</span><span>Data: __/__/__</span><span>Início: __:__ Fim: __:__</span><span>Acertos: __/10</span></div>
+    <h2>Equilíbrios: onde <i>N</i>′ = 0</h2>
+    <p class="task">Encontre <b>todos</b> os equilíbrios <i>N</i>* de cada EDO (iguale o lado direito a zero).</p>
+    <div class="ex"><b class="tag">Exemplo</b><br>
+      <i>N</i>′ = 2<i>N</i> − 10 &nbsp;→&nbsp; 2<i>N</i> − 10 = 0 &nbsp;→&nbsp; <i>N</i>* = <b>5</b>.<br>
+      <i>N</i>′ = <i>N</i>(<i>N</i> − 4) &nbsp;→&nbsp; <i>N</i> = 0 ou <i>N</i> − 4 = 0 &nbsp;→&nbsp; <i>N</i>* = <b>0</b> e <i>N</i>* = <b>4</b>.</div>
+    <div class="dica"><b class="tag">Dica</b><br>
+      Equilíbrio é onde a <b>taxa</b> <i>N</i>′ vale zero, não onde <i>N</i> vale zero. Se o lado direito é um <b>produto</b>, cada fator igual a zero dá um equilíbrio.</div>
+    <ol class="q">
+      <li><span class="n">1.</span><span class="eq"><i>N</i>′ = 3<i>N</i> − 12</span><span class="ans"><span style="flex:none"><i>N</i>* =</span><span class="bl"></span></span></li>
+      <li><span class="n">2.</span><span class="eq"><i>N</i>′ = 5<i>N</i> − 20</span><span class="ans"><span style="flex:none"><i>N</i>* =</span><span class="bl"></span></span></li>
+      <li><span class="n">3.</span><span class="eq"><i>N</i>′ = −2<i>N</i> + 8</span><span class="ans"><span style="flex:none"><i>N</i>* =</span><span class="bl"></span></span></li>
+      <li><span class="n">4.</span><span class="eq"><i>N</i>′ = 6 − 0,5<i>N</i></span><span class="ans"><span style="flex:none"><i>N</i>* =</span><span class="bl"></span></span></li>
+      <li><span class="n">5.</span><span class="eq"><i>N</i>′ = 0,5<i>N</i> − 100</span><span class="ans"><span style="flex:none"><i>N</i>* =</span><span class="bl"></span></span></li>
+      <li><span class="n">6.</span><span class="eq"><i>N</i>′ = <i>N</i>(<i>N</i> − 3)</span><span class="ans"><span style="flex:none"><i>N</i>* =</span><span class="bl"></span></span></li>
+      <li><span class="n">7.</span><span class="eq"><i>N</i>′ = <i>N</i>(1 − <span class="fr"><span><i>N</i></span><span>10</span></span>)</span><span class="ans"><span style="flex:none"><i>N</i>* =</span><span class="bl"></span></span></li>
+      <li><span class="n">8.</span><span class="eq"><i>N</i>′ = 2<i>N</i>(1 − <span class="fr"><span><i>N</i></span><span>50</span></span>)</span><span class="ans"><span style="flex:none"><i>N</i>* =</span><span class="bl"></span></span></li>
+      <li><span class="n">9.</span><span class="eq"><i>N</i>′ = <i>rN</i>(1 − <span class="fr"><span><i>N</i></span><span><i>K</i></span></span>) &nbsp;(<i>r</i> ≠ 0)</span><span class="ans"><span style="flex:none"><i>N</i>* =</span><span class="bl"></span></span></li>
+      <li><span class="n">10.</span><span class="eq"><i>N</i>′ = <i>rN</i> − <i>h</i> &nbsp;(<i>r</i> ≠ 0)</span><span class="ans"><span style="flex:none"><i>N</i>* =</span><span class="bl"></span></span></li>
+    </ol>
+    <div class="foot">A5 · gabarito na folha G2</div>
+  </div>
+
+  <div class="half">
+    <div class="top"><span class="code">A 6</span><span class="course">MAP2226 · EDO · Nível A: ler uma EDO</span></div>
+    <div class="meta"><span>Nome:</span><span>Data: __/__/__</span><span>Início: __:__ Fim: __:__</span><span>Acertos: __/8</span></div>
+    <h2>Verificação direta</h2>
+    <p class="task">A função dada é solução da EDO? Derive, calcule o lado direito e compare.</p>
+    <div class="ex"><b class="tag">Exemplo</b> &nbsp; EDO: <i>N</i>′ = 2<i>N</i> &nbsp;·&nbsp; candidata: <i>N</i>(<i>t</i>) = 5<i>e</i><sup>2<i>t</i></sup><br>
+      Derivada: <i>N</i>′ = 10<i>e</i><sup>2<i>t</i></sup> &nbsp;·&nbsp; Lado direito: 2<i>N</i> = 10<i>e</i><sup>2<i>t</i></sup> &nbsp;·&nbsp; Iguais → <b>é solução</b>.</div>
+    <div class="dica"><b class="tag">Dica</b><br>
+      (<i>e</i><sup><i>at</i></sup>)′ = <i>a</i> · <i>e</i><sup><i>at</i></sup> &nbsp;·&nbsp; a derivada de uma constante é 0. No lado direito, troque <i>N</i> pela candidata <b>inteira</b>.</div>
+    <ol class="q v">
+      <li><div class="l1"><span class="n">1.</span><i>N</i>′ = 3<i>N</i> &nbsp;·&nbsp; <i>N</i>(<i>t</i>) = <i>e</i><sup>3<i>t</i></sup></div>
+          <div class="l2">derivada: <span class="bl"></span> lado direito: <span class="bl"></span> solução? <span class="bl s"></span></div></li>
+      <li><div class="l1"><span class="n">2.</span><i>N</i>′ = 3<i>N</i> &nbsp;·&nbsp; <i>N</i>(<i>t</i>) = 4<i>e</i><sup>3<i>t</i></sup></div>
+          <div class="l2">derivada: <span class="bl"></span> lado direito: <span class="bl"></span> solução? <span class="bl s"></span></div></li>
+      <li><div class="l1"><span class="n">3.</span><i>N</i>′ = 3<i>N</i> &nbsp;·&nbsp; <i>N</i>(<i>t</i>) = <i>e</i><sup>2<i>t</i></sup></div>
+          <div class="l2">derivada: <span class="bl"></span> lado direito: <span class="bl"></span> solução? <span class="bl s"></span></div></li>
+      <li><div class="l1"><span class="n">4.</span><i>N</i>′ = −2<i>N</i> &nbsp;·&nbsp; <i>N</i>(<i>t</i>) = 7<i>e</i><sup>−2<i>t</i></sup></div>
+          <div class="l2">derivada: <span class="bl"></span> lado direito: <span class="bl"></span> solução? <span class="bl s"></span></div></li>
+      <li><div class="l1"><span class="n">5.</span><i>N</i>′ = −2<i>N</i> &nbsp;·&nbsp; <i>N</i>(<i>t</i>) = <i>e</i><sup>−2<i>t</i></sup> + 1</div>
+          <div class="l2">derivada: <span class="bl"></span> lado direito: <span class="bl"></span> solução? <span class="bl s"></span></div></li>
+      <li><div class="l1"><span class="n">6.</span><i>N</i>′ = 2<i>N</i> − 10 &nbsp;·&nbsp; <i>N</i>(<i>t</i>) = 5</div>
+          <div class="l2">derivada: <span class="bl"></span> lado direito: <span class="bl"></span> solução? <span class="bl s"></span></div></li>
+      <li><div class="l1"><span class="n">7.</span><i>N</i>′ = 2<i>N</i> − 10 &nbsp;·&nbsp; <i>N</i>(<i>t</i>) = 5 + <i>e</i><sup>2<i>t</i></sup></div>
+          <div class="l2">derivada: <span class="bl"></span> lado direito: <span class="bl"></span> solução? <span class="bl s"></span></div></li>
+      <li><div class="l1"><span class="n">8.</span><i>N</i>′ = 2<i>N</i> − 10 &nbsp;·&nbsp; <i>N</i>(<i>t</i>) = <i>e</i><sup>2<i>t</i></sup></div>
+          <div class="l2">derivada: <span class="bl"></span> lado direito: <span class="bl"></span> solução? <span class="bl s"></span></div></li>
+    </ol>
+    <div class="foot">A6 · gabarito na folha G2</div>
+  </div>
+</div>
+
+<!-- ======================= FOLHA 4: GABARITO ======================= -->
+<div class="sheet">
+
+  <div class="half gab">
+    <div class="top"><span class="code">G 1</span><span class="course">MAP2226 · EDO · Nível A · GABARITO A1–A3</span></div>
+    <h3>A1 · Incógnita e ordem</h3>
+    <div class="cols">
+      <div><b>1.</b> <i>N</i>, ordem 1</div>
+      <div><b>2.</b> <i>P</i>, ordem 1</div>
+      <div><b>3.</b> <i>x</i>, ordem 1</div>
+      <div><b>4.</b> <i>x</i>, ordem 2</div>
+      <div><b>5.</b> <i>y</i>, ordem 2</div>
+      <div><b>6.</b> <i>N</i>, ordem 1</div>
+      <div><b>7.</b> <i>N</i>, ordem 1</div>
+      <div><b>8.</b> <i>x</i>, ordem 3</div>
+      <div><b>9.</b> <i>y</i>, ordem 2</div>
+      <div><b>10.</b> <i>N</i>, ordem 1</div>
+    </div>
+    <div class="note">Nos itens 6, 7 e 9 o expoente não muda a ordem: conta só a maior derivada.</div>
+
+    <h3>A2 · O tempo <i>t</i> aparece?</h3>
+    <div class="cols">
+      <div><b>1.</b> NÃO</div>
+      <div><b>2.</b> SIM</div>
+      <div><b>3.</b> NÃO</div>
+      <div><b>4.</b> SIM</div>
+      <div><b>5.</b> NÃO</div>
+      <div><b>6.</b> NÃO</div>
+      <div><b>7.</b> SIM</div>
+      <div><b>8.</b> SIM</div>
+      <div><b>9.</b> NÃO</div>
+      <div><b>10.</b> SIM</div>
+      <div><b>11.</b> NÃO</div>
+      <div><b>12.</b> NÃO</div>
+    </div>
+    <div class="note">Compare 8 com 9 e 10 com 11: a mesma função (sen, exponencial) aplicada a <i>t</i> dá SIM; aplicada a <i>N</i> dá NÃO.</div>
+
+    <h3>A3 · Autônoma (A) ou não autônoma (NA)</h3>
+    <div class="cols">
+      <div><b>1.</b> A, não há <i>t</i></div>
+      <div><b>2.</b> NA, termo + <i>t</i></div>
+      <div><b>3.</b> A, não há <i>t</i></div>
+      <div><b>4.</b> NA, fator <i>t</i></div>
+      <div><b>5.</b> NA, cos <i>t</i></div>
+      <div><b>6.</b> A, não há <i>t</i></div>
+      <div><b>7.</b> A, <i>r</i> e <i>K</i> constantes</div>
+      <div><b>8.</b> NA, <i>K</i>(<i>t</i>)</div>
+      <div><b>9.</b> NA, <i>r</i>(<i>t</i>)</div>
+      <div><b>10.</b> A, <i>h</i> constante</div>
+      <div><b>11.</b> NA, sen <i>t</i></div>
+      <div><b>12.</b> A, não há <i>t</i> em nenhuma das duas</div>
+    </div>
+    <div class="note">Itens 3, 6, 7 e 12 são <b>não lineares e autônomos</b>: as duas classificações são independentes. O item 5 é não autônomo mesmo sem <i>N</i> no lado direito.</div>
+  </div>
+
+  <div class="half gab">
+    <div class="top"><span class="code">G 2</span><span class="course">MAP2226 · EDO · Nível A · GABARITO A4–A6</span></div>
+    <h3>A4 · Valor <i>N</i> × taxa <i>N</i>′</h3>
+    <div class="cols">
+      <div><b>1.</b> <i>N</i>′ = 6, cresce</div>
+      <div><b>2.</b> <i>N</i>′ = 20, cresce</div>
+      <div><b>3.</b> <i>N</i>′ = −6, decresce</div>
+      <div><b>4.</b> <i>N</i>′ = −15, decresce</div>
+      <div><b>5.</b> <i>N</i>′ = 6, cresce</div>
+      <div><b>6.</b> <i>N</i>′ = 0, parada</div>
+      <div><b>7.</b> <i>N</i>′ = −6, decresce</div>
+      <div><b>8.</b> <i>N</i>′ = 2,5, cresce</div>
+      <div><b>9.</b> <i>N</i>′ = 0, parada</div>
+      <div><b>10.</b> <i>N</i>′ = −20, decresce</div>
+    </div>
+    <div class="note">Nos itens 6 e 9 a população não é zero (<i>N</i> = 5 e <i>N</i> = 10); quem é zero é a taxa.</div>
+
+    <h3>A5 · Equilíbrios</h3>
+    <div class="cols">
+      <div><b>1.</b> <i>N</i>* = 4</div>
+      <div><b>2.</b> <i>N</i>* = 4</div>
+      <div><b>3.</b> <i>N</i>* = 4</div>
+      <div><b>4.</b> <i>N</i>* = 12</div>
+      <div><b>5.</b> <i>N</i>* = 200</div>
+      <div><b>6.</b> <i>N</i>* = 0 e 3</div>
+      <div><b>7.</b> <i>N</i>* = 0 e 10</div>
+      <div><b>8.</b> <i>N</i>* = 0 e 50</div>
+      <div><b>9.</b> <i>N</i>* = 0 e <i>K</i></div>
+      <div><b>10.</b> <i>N</i>* = <i>h</i>/<i>r</i></div>
+    </div>
+    <div class="note">Itens 6 a 9: lado direito em forma de produto dá um equilíbrio por fator que contém <i>N</i>. Item 9: os equilíbrios da logística são 0 e a capacidade de suporte <i>K</i>.</div>
+
+    <h3>A6 · Verificação direta</h3>
+    <div class="cols one">
+      <div><b>1.</b> derivada 3<i>e</i><sup>3<i>t</i></sup> · lado direito 3<i>e</i><sup>3<i>t</i></sup> · <b>sim</b></div>
+      <div><b>2.</b> derivada 12<i>e</i><sup>3<i>t</i></sup> · lado direito 12<i>e</i><sup>3<i>t</i></sup> · <b>sim</b></div>
+      <div><b>3.</b> derivada 2<i>e</i><sup>2<i>t</i></sup> · lado direito 3<i>e</i><sup>2<i>t</i></sup> · <b>não</b></div>
+      <div><b>4.</b> derivada −14<i>e</i><sup>−2<i>t</i></sup> · lado direito −14<i>e</i><sup>−2<i>t</i></sup> · <b>sim</b></div>
+      <div><b>5.</b> derivada −2<i>e</i><sup>−2<i>t</i></sup> · lado direito −2<i>e</i><sup>−2<i>t</i></sup> − 2 · <b>não</b></div>
+      <div><b>6.</b> derivada 0 · lado direito 2 · 5 − 10 = 0 · <b>sim</b></div>
+      <div><b>7.</b> derivada 2<i>e</i><sup>2<i>t</i></sup> · lado direito 10 + 2<i>e</i><sup>2<i>t</i></sup> − 10 = 2<i>e</i><sup>2<i>t</i></sup> · <b>sim</b></div>
+      <div><b>8.</b> derivada 2<i>e</i><sup>2<i>t</i></sup> · lado direito 2<i>e</i><sup>2<i>t</i></sup> − 10 · <b>não</b></div>
+    </div>
+    <div class="note">O item 6 mostra que um equilíbrio (folha A5) é uma solução constante.</div>
+  </div>
+</div>
+
+</body>
+</html>
