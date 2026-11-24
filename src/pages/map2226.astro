@@ -1,0 +1,68 @@
+---
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Main from "@/components/Main.astro";
+import Footer from "@/components/Footer.astro";
+import config from "@/config";
+
+const title = "MAP2226";
+const description =
+  "Folhas de treino de Equações Diferenciais Ordinárias (MAP2226, USP) em estilo Kumon, prontas para imprimir.";
+
+// As folhas são arquivos estáticos em public/map2226/kumon, copiados por
+// scripts/sync-kumon.mjs. A lista é montada no build a partir do <title>
+// de cada arquivo, então um bloco novo aparece aqui sem editar esta página.
+const dir = join(process.cwd(), "public", "map2226", "kumon");
+const sheets = readdirSync(dir)
+  .filter(name => /^kumon-.+\.html$/.test(name))
+  .sort()
+  .map(name => {
+    const html = readFileSync(join(dir, name), "utf-8");
+    const full = html.match(/<title>(.*?)<\/title>/)?.[1] ?? name;
+    const parts = full.split(" · ");
+    return {
+      href: `/map2226/kumon/${name}`,
+      level: parts[1]?.replace("Nível ", "") ?? "",
+      label: parts.slice(2).join(" · ") || full,
+    };
+  });
+---
+
+<Layout title={`${title} | ${config.site.title}`} description={description}>
+  <Header />
+
+  <Breadcrumb />
+
+  <Main pageTitle={title} class="app-prose">
+    <p>
+      Folhas de treino para a disciplina MAP2226 — Introdução às Equações
+      Diferenciais Ordinárias e Aplicações, da USP, no estilo das folhas do
+      Kumon: exercícios curtos, de nível básico, que repetem a mesma ideia com
+      pequenas variações. Cada bloco tem seis meias-folhas de exercícios e o
+      gabarito na última página.
+    </p>
+    <p>
+      Para imprimir, abra o bloco e, na janela de impressão, escolha orientação
+      paisagem, margens "Nenhuma", escala 100% e deixe ligada a opção de
+      imprimir os planos de fundo. Cada página A4 sai dividida em duas
+      meias-folhas A5.
+    </p>
+    <h2>Blocos</h2>
+    <ul>
+      {
+        sheets.map(sheet => (
+          <li>
+            <a href={sheet.href}>
+              {sheet.level} — {sheet.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </Main>
+
+  <Footer />
+</Layout>

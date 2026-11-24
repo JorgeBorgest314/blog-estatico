@@ -15,3 +15,6 @@
 
 # Ignore MDX files
 *.mdx
+
+# Folhas de treino em HTML pronto para imprimir: servidas como estão
+/public/map2226
